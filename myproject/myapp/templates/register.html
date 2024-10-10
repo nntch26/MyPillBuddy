@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %} Registration {% endblock title %}
+
+{% block content %}
+    <div class="container">
+        <h1>ลงทะเบียน</h1>
+        <div class="row">
+            <div class="col-md">
+                <form>
+                    <div class="mb-3">
+                        <label for="f_name" class="form-label">ชื่อ:</label>
+                        <input type="text" class="form-control" id="f_name" name="f_name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="l_name" class="form-label">นามสกุล:</label>
+                        <input type="text" class="form-control" id="l_name" name="l_name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">เบอร์โทรศัพท์:</label>
+                        <input type="tel" class="form-control" id="phone" name="phone">
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">อีเมลล์:</label>
+                        <input type="email" class="form-control" id="email" name="email">
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">รหัสผ่าน:</label>
+                        <input type="password" class="form-control" id="password" name="password">
+                    </div>
+                    <div class="mb-3">
+                        <label for="confirm_password" class="form-label">ยืนยันรหัสผ่าน:</label>
+                        <input type="password" class="form-control" id="confirm_password" name="confirm_password">
+                    </div>
+                    <div class="mb-3">
+                        <label for="health_info" class="form-label">ข้อมูลเกี่ยวกับสุขภาพเบื้องต้น:</label>
+                        <textarea class="form-control-lg" rows="3" id="health_info" name="health_info"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">ลงทะเบียน</button>
+                </form>
+                <p class="text-center mt-3">มีบัญชีอยู่แล้ว? <a class="text-decoration-none text-secondary fw-bold text-uppercase" href="login.html">Log in</a></p>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

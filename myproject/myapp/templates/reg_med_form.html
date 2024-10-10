@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %} บันทึกข้อมูลยา {% endblock title %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="text-center">ข้อมูลยา</h1>
+        <form>
+            <div class="mb-3">
+                <label for="medication_name" class="form-label">ชื่อยา:</label>
+                <input type="text" class="form-control" id="medication_name" name="medication_name" aria-label="ชื่อยา" aria-required="true">
+            </div>
+            <div class="mb-3">
+                <label for="dosage" class="form-label">ปริมาณยา:</label>
+                <input type="text" class="form-control" id="dosage" name="dosage" aria-label="ขนาดยา" aria-required="true">
+            </div>
+            <div class="mb-3">
+                <label for="frequency" class="form-label">ความถี่:</label>
+                <select class="form-select" id="frequency" name="frequency" aria-label="ความถี่" aria-required="true">
+                    <option value="">เลือกความถี่</option>
+                    <option value="daily">ทุกวัน</option>
+                    <option value="twice_daily">สองครั้งต่อวัน</option>
+                    <option value="three_times_daily">สามครั้งต่อวัน</option>
+                    <option value="other">อื่นๆ (โปรดระบุ)</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="time_of_day" class="form-label">เวลาของวัน:</label>
+                <select class="form-select" id="time_of_day" name="time_of_day" aria-label="เวลาของวัน" aria-required="true">
+                    <option value="">เลือกเวลาของวัน</option>
+                    <option value="morning">เช้า</option>
+                    <option value="afternoon">บ่าย</option>
+                    <option value="evening">เย็น</option>
+                    <option value="other">อื่นๆ (โปรดระบุ)</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="notes" class="form-label">หมายเหตุ:</label>
+                <textarea class="form-control-lg" id="notes" name="notes" aria-label="หมายเหตุ" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">เพิ่มยา</button>
+        </form>
+    </div>
+
+    <!-- Add some accessibility features -->
+    <script>
+        // Add aria-live attribute to the form to announce changes to screen readers
+        document.querySelector('form').setAttribute('aria-live', 'polite');
+        
+        // Add autofocus to the first input field
+        document.querySelector('#medication_name').autofocus = true;
+    </script>
+{% endblock content %}
