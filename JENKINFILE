@@ -1,0 +1,55 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_IMAGE = 'your-dockerhub-username/django-app'
+        BRANCH = 'main'
+    }
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git branch: "${BRANCH}", url: 'https://github.com/Peeradech01/DevTools_Project.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    docker.build("${DOCKER_IMAGE}:${env.BUILD_NUMBER}")
+                }
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
+                        docker.image("${DOCKER_IMAGE}:${env.BUILD_NUMBER}").push()
+                    }
+                }
+            }
+        }
+
+        stage('Deploy to Server') {
+            steps {
+                sshagent (credentials: ['ssh-server-credentials']) {
+                    sh """
+                    ssh -o StrictHostKeyChecking=no user@your-server << EOF
+                    docker pull ${DOCKER_IMAGE}:${env.BUILD_NUMBER}
+                    docker stop django-app || true
+                    docker rm django-app || true
+                    docker run -d --name django-app -p 8000:8000 ${DOCKER_IMAGE}:${env.BUILD_NUMBER}
+                    EOF
+                    """
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
+        }
+    }
+}
