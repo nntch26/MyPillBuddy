@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#2196F3">
+    <title>เพิ่มยา</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2196F3;
+            --primary-light: #E3F2FD;
+            --safe-area-inset-bottom: env(safe-area-inset-bottom, 0);
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 60px;
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            color: white;
+            padding: 0;
+            font-size: 1.5rem;
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .form-container {
+            background: white;
+            flex: 1;
+            padding: 20px;
+            margin: 0 auto;
+            width: 100%;
+            max-width: 768px;
+        }
+
+        @media (min-width: 768px) {
+            .form-container {
+                border-radius: 20px;
+                margin: 20px auto;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            }
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(33, 150, 243, 0.25);
+        }
+
+        .time-select {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .time-option {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 20px;
+            padding: 8px 20px;
+            color: #666;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
+        }
+
+        .time-option:hover {
+            background: var(--primary-light);
+        }
+
+        .time-option.active {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+
+        .frequency-select {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .frequency-option {
+            text-align: center;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 10px;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
+        }
+
+        .frequency-option:hover {
+            background: var(--primary-light);
+        }
+
+        .frequency-option.active {
+            background: var(--primary-light);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .frequency-option i {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .med-time-input {
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 10px;
+            transition: all 0.2s;
+        }
+
+        .med-time-input:focus-within {
+            border-color: var(--primary-color);
+        }
+
+        .med-time-input input {
+            border: none;
+            outline: none;
+            width: 100%;
+            font-size: 1.1rem;
+            background: transparent;
+        }
+
+        .submit-container {
+            position: sticky;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 15px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            margin: 0 -20px -20px -20px;
+            padding-bottom: calc(15px + var(--safe-area-inset-bottom));
+        }
+
+        @media (min-width: 768px) {
+            .submit-container {
+                position: relative;
+                box-shadow: none;
+                margin: 0;
+                padding: 15px 0 0 0;
+            }
+        }
+
+        .submit-button {
+            width: 100%;
+            max-width: 768px;
+            margin: 0 auto;
+            display: block;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 15px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        .submit-button:hover {
+            background-color: #1976D2;
+        }
+
+        .form-floating > .form-control {
+            padding-top: 1.625rem;
+            padding-bottom: 0.625rem;
+        }
+
+        .form-floating > .form-control:focus ~ label,
+        .form-floating > .form-control:not(:placeholder-shown) ~ label {
+            opacity: 0.65;
+            transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+        }
+
+        /* Touch-friendly adjustments */
+        @media (hover: none) {
+            .time-option,
+            .frequency-option {
+                min-height: 44px;
+            }
+
+            select.form-select {
+                min-height: 44px;
+            }
+
+            .submit-button {
+                min-height: 50px;
+            }
+        }
+
+        /* PWA Support */
+        @media (display-mode: standalone) {
+            .header {
+                padding-top: env(safe-area-inset-top);
+            }
+            .submit-container {
+                padding-bottom: calc(15px + env(safe-area-inset-bottom));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="index.html" class="back-button">
+            <i class="bi bi-chevron-left"></i>
+        </a>
+        <h5 class="mb-0">เพิ่มยา</h5>
+    </div>
+
+    <div class="form-container">
+        <form id="medicineForm" novalidate>
+            <div class="mb-4">
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="medName" placeholder="กรอกชื่อยา" required>
+                    <label for="medName">ชื่อยา</label>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">ช่วงเวลา</label>
+                <div class="time-select">
+                    <div class="time-option active" role="button" tabindex="0">ก่อนอาหาร</div>
+                    <div class="time-option" role="button" tabindex="0">หลังอาหาร</div>
+                    <div class="time-option" role="button" tabindex="0">ก่อนนอน</div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">ความถี่</label>
+                <div class="frequency-select">
+                    <div class="frequency-option active" role="button" tabindex="0">
+                        <i class="bi bi-calendar-check"></i>
+                        <div>ทุกวัน</div>
+                    </div>
+                    <div class="frequency-option" role="button" tabindex="0">
+                        <i class="bi bi-calendar2-week"></i>
+                        <div>ทุกสัปดาห์</div>
+                    </div>
+                    <div class="frequency-option" role="button" tabindex="0">
+                        <i class="bi bi-calendar2-month"></i>
+                        <div>ทุกเดือน</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">เวลากินยา</label>
+                <div class="med-time-input">
+                    <input type="time" value="12:00" required>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">จำนวน</label>
+                <select class="form-select">
+                    <option>1 เม็ด</option>
+                    <option>2 เม็ด</option>
+                    <option>3 เม็ด</option>
+                    <option>4 เม็ด</option>
+                    <option>5 เม็ด</option>
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <div class="form-floating">
+                    <textarea class="form-control" placeholder="เพิ่มหมายเหตุ (ถ้ามี)" id="notes" style="height: 100px"></textarea>
+                    <label for="notes">หมายเหตุ</label>
+                </div>
+            </div>
+
+            <div class="submit-container">
+                <button type="submit" class="submit-button">
+                    บันทึก
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,25 +1,117 @@
 {% extends 'base.html' %}
 
-{% block title %} Registration {% endblock title %}
+{% block title %} ระบบสมาชิก {% endblock title %}
+
+
+{% block styles %}
+    <style>
+        body {
+            background-color: #2196f3;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        .auth-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        .btn-primary {
+            background-color: #2196f3;
+            border-color: #2196f3;
+        }
+        .btn-primary:hover {
+            background-color: #1976d2;
+            border-color: #1976d2;
+        }
+        .form-control:focus {
+            border-color: #2196f3;
+            box-shadow: 0 0 0 0.25rem rgba(33, 150, 243, 0.25);
+        }
+        .link-primary {
+            color: #2196f3 !important;
+        }
+        .link-primary:hover {
+            color: #1976d2 !important;
+        }
+    </style>
+{% endblock styles %}
 
 {% block content %}
     <div class="container">
-        <h1>เข้าสู่ระบบ</h1>
-        <div class="row">
-            <div class="col-md">
-                <form>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">อีเมลล์:</label>
-                        <input type="email" class="form-control" id="email" name="email">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-6 col-lg-4">
+                <!-- Login Form -->
+                <div class="auth-card p-4" id="loginForm">
+                    <div class="d-flex align-items-center mb-4">
+                        <button class="btn btn-link text-dark p-0" onclick="toggleForms()">
+                            <i class="bi bi-arrow-left fs-4"></i>
+                        </button>
+                        <h4 class="text-center flex-grow-1 mb-0">เข้าสู่ระบบ</h4>
                     </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">รหัสผ่าน:</label>
-                        <input type="password" class="form-control" id="password" name="password">
+                    <form>
+                        <div class="mb-3">
+                            <label for="loginEmail" class="form-label">อีเมล</label>
+                            <input type="email" class="form-control" id="loginEmail" placeholder="กรุณากรอกอีเมล">
+                        </div>
+                        <div class="mb-3">
+                            <label for="loginPassword" class="form-label">รหัสผ่าน</label>
+                            <input type="password" class="form-control" id="loginPassword" placeholder="กรุณากรอกรหัสผ่าน">
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 mb-3">เข้าสู่ระบบ</button>
+                        <div class="text-center">
+                            <span class="text-muted">ยังไม่มีบัญชี? </span>
+                            <a href="#" class="link-primary text-decoration-none" onclick="toggleForms()">ลงทะเบียน</a>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Register Form -->
+                <div class="auth-card p-4" id="registerForm" style="display: none;">
+                    <div class="d-flex align-items-center mb-4">
+                        <button class="btn btn-link text-dark p-0" onclick="toggleForms()">
+                            <i class="bi bi-arrow-left fs-4"></i>
+                        </button>
+                        <h4 class="text-center flex-grow-1 mb-0">ลงทะเบียน</h4>
                     </div>
-                    <button type="submit" class="btn btn-primary">เข้าสู้ระบบ</button>
-                </form>
-                <p class="text-center mt-3">ยังไม่มีบัญชี? <a class="text-decoration-none text-secondary fw-bold text-uppercase" href="register.html">Register</a></p>
+                    <form>
+                        <div class="mb-3">
+                            <label for="registerEmail" class="form-label">อีเมล</label>
+                            <input type="email" class="form-control" id="registerEmail" placeholder="กรุณากรอกอีเมล">
+                        </div>
+                        <div class="mb-3">
+                            <label for="registerPassword" class="form-label">รหัสผ่าน</label>
+                            <input type="password" class="form-control" id="registerPassword" placeholder="กรุณากรอกรหัสผ่าน">
+                        </div>
+                        <div class="mb-3">
+                            <label for="confirmPassword" class="form-label">ยืนยันรหัสผ่าน</label>
+                            <input type="password" class="form-control" id="confirmPassword" placeholder="กรุณายืนยันรหัสผ่าน">
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 mb-3">ลงทะเบียน</button>
+                        <div class="text-center">
+                            <span class="text-muted">มีบัญชีอยู่แล้ว? </span>
+                            <a href="#" class="link-primary text-decoration-none" onclick="toggleForms()">เข้าสู่ระบบ</a>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
+
 {% endblock content %}
+
+{% block script %}
+    <script>
+        function toggleForms() {
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            if (loginForm.style.display === 'none') {
+                loginForm.style.display = 'block';
+                registerForm.style.display = 'none';
+            } else {
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'block';
+            }
+        }
+    </script>
+{% endblock script %}
