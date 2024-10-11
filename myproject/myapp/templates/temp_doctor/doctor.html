@@ -1,5 +1,5 @@
 <!-- extends ก่อน ค่อย load -->
-{% extends 'base_doctor.html' %} 
+{% extends 'temp_doctor/base_doctor.html' %} 
 {% load static %}
 
 
@@ -11,6 +11,7 @@
     :root {
         --primary-blue: #2196F3;
         --light-blue: #E3F2FD;
+        
     }
 
     body {
@@ -99,11 +100,11 @@
             <div class="col">
                 <h4>ระบบจัดการยาสำหรับแพทย์</h4>
             </div>
-            <div class="col-auto">
+            <!-- <div class="col-auto">
                 <a href="{% url 'url_addmedication' %}" class="btn btn-primary">
                     <i class="fas fa-plus me-2"></i>สั่งจ่ายยาใหม่
                 </a>
-            </div>
+            </div> -->
         </div>
 
         <div class="row">

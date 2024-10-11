@@ -11,11 +11,15 @@ urlpatterns = [
     path("login/", LoginView.as_view(), name="url_login"),
     path("logout/", LogoutView.as_view(), name="url_logout"),
     path("profile/", ProfileView.as_view(), name="url_profile"),
-    path("history/", HistoryView.as_view(), name="url_history"),
     path("medication/", MedicationView.as_view(), name="url_medication"),
 
     # doctor
     path("doctor/", DoctorView.as_view(), name="url_doctor"),
-    path("addmedication/", AddMedicationView.as_view(), name="url_addmedication"),
+    path("ShowMedication/", ShowMedicationView.as_view(), name="url_showmedication"),
+    path("ShowMedication/add/", AddMedicationView.as_view(), name="url_addmedication"),
+
+    path("patient_list/", PatientListView.as_view(), name="url_patientlist"),
+    path("patient_list/add/", PatientAddView.as_view(), name="url_addpatient"),
+
 
 ]

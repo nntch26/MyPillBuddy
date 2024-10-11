@@ -10,7 +10,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-    
+
     <!--- stylesheet --->
     <link rel="stylesheet" href="{% static 'style.css' %}">
 
@@ -36,18 +36,24 @@
             <small class="text-muted">แพทย์ผู้เชี่ยวชาญ</small>
         </div>
         <div class="nav flex-column">
-            <a href="#home" class="nav-link active">
+            <a href="{% url 'url_doctor' %}" class="nav-link active">
                 <i class="fas fa-home me-2"></i> หน้าหลัก
             </a>
-            <a href="#" class="nav-link">
+
+            <a href="{% url 'url_addmedication' %}" class="nav-link">
+                <i class="fas fa-plus me-2"></i>สั่งจ่ายยาใหม่
+            </a>
+
+            <a href="{% url 'url_patientlist' %}" class="nav-link">
                 <i class="fas fa-user-injured me-2"></i> รายชื่อคนไข้
             </a>
-            <a href="#" class="nav-link">
+            
+            <a href="{% url 'url_showmedication' %}" class="nav-link">
                 <i class="fas fa-pills me-2"></i> จัดการยา
             </a>
 
-            <a href="index.html" class="nav-link">
-                <i class="bi bi-door-closed"></i>จากออกระบบ
+            <a href="{% url 'url_logout' %}" class="nav-link">
+                <i class="bi bi-door-closed-fill me-2"></i> ออกจากระบบ
             </a>
         </div>
     </div>

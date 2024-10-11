@@ -1,0 +1,193 @@
+<!-- extends ก่อน ค่อย load -->
+{% extends 'temp_doctor/base_doctor.html' %} 
+{% load static %}
+
+
+
+{% block title %}หน้าจัดการยา{% endblock title %}
+
+{% block styles %}
+    <style>
+        :root {
+            --primary-blue: #2196F3;
+            --light-blue: #E3F2FD;
+            --secondary-blue:#1976d2;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 60px;
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            color: white;
+            padding: 0;
+            font-size: 1.5rem;
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .navbar {
+            background-color: var(--primary-blue);
+            padding: 1rem;
+        }
+        
+        .navbar-brand {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .content-wrapper {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary-blue);
+            border-color: var(--secondary-blue);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-blue);
+            border-color: var(--primary-blue);
+        }
+        
+        .table thead th {
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+        }
+        
+        .modal-header {
+            background-color: var(--primary-blue);
+            color: white;
+        }
+        
+        .modal-title {
+            color: white;
+        }
+        
+        .btn-close {
+            filter: brightness(0) invert(1);
+        }
+        
+        .form-control:focus {
+            border-color: var(--secondary-blue);
+            box-shadow: 0 0 0 0.2rem rgba(0, 86, 145, 0.25);
+        }
+        
+    </style>
+    
+{% endblock styles %}
+</head>
+<body>
+    <!-- Navbar -->
+    {% block navbar %}
+    <div class="header">
+        <a href="{% url 'url_doctor' %}" class="back-button">
+            <i class="bi bi-chevron-left"></i>
+        </a>
+        <h5 class="mb-0">จัดการยา</h5>
+    </div>
+    {% endblock navbar %}
+
+    {% block content %}
+    <div class="container">
+        <div class="content-wrapper">
+            <!-- Button to trigger add medication modal -->
+            <button type="button" class="btn btn-primary mb-4" data-bs-toggle="modal" data-bs-target="#addMedicationModal">
+                <i class="fas fa-plus"></i> เพิ่มยา
+            </button>
+
+            <!-- Medications Table -->
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>ลำดับ</th>
+                            <th>ชื่อยา</th>
+                            <th>การจัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="medicationTableBody">
+                        <!-- Table content will be dynamically populated -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Add Medication Modal -->
+        <div class="modal fade" id="addMedicationModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">เพิ่มยา</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="addMedicationForm">
+                            <div class="mb-3">
+                                <label for="medicationName" class="form-label">ชื่อยา</label>
+                                <input type="text" class="form-control" id="medicationName" required>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                        <button type="button" class="btn btn-primary" onclick="addMedication()">บันทึก</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Medication Modal -->
+        <div class="modal fade" id="editMedicationModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">แก้ไขยา</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editMedicationForm">
+                            <input type="hidden" id="editMedicationId">
+                            <div class="mb-3">
+                                <label for="editMedicationName" class="form-label">ชื่อยา</label>
+                                <input type="text" class="form-control" id="editMedicationName" required>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                        <button type="button" class="btn btn-primary" onclick="updateMedication()">บันทึก</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock content %}

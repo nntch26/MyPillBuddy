@@ -73,6 +73,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'myproject.wsgi.application'
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 
 # Database

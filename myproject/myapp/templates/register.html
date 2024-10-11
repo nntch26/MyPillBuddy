@@ -1,3 +1,5 @@
+{% load crispy_forms_tags %}
+
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -46,62 +48,94 @@
 <body>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-12 col-md-6 col-lg-4">
+            <div class="col-12 col-md-6">
                 <!-- Register Form -->
                 <div class="auth-card p-4" id="registerForm">
                     <div class="d-flex align-items-center mb-4">
                         <h4 class="text-center flex-grow-1 mb-0">ลงทะเบียน</h4>
                     </div>
-                    <form method="POST">
-                        {% csrf_token %}
-                        <div class="mb-3">
-                            <label for="registerEmail" class="form-label">ชื่อผู้ใช้</label>
-                            {{ form.username }}
-                        </div>
-                        <div class="mb-3">
-                            <label for="registerPassword" class="form-label">รหัสผ่าน</label>
-                            {{ form.password1 }}
-                        </div>
-                        <div class="mb-3">
-                            <label for="confirmPassword" class="form-label">ยืนยันรหัสผ่าน</label>
-                            {{ form.password2 }}
-                        </div>
-                        <div class="mb-3">
-                            <label for="confirmPassword" class="form-label">ชื่อจริง</label>
-                            {{ form.first_name }}
-                        </div>
-                        <div class="mb-3">
-                            <label for="confirmPassword" class="form-label">นามสกุล</label>
-                            {{ form.last_name }}
-                        </div>
-                        <div class="mb-3">
-                            <label for="confirmPassword" class="form-label">วันเกิด</label>
-                            {{ form.birth_date }}
-                        </div>
-                        <div class="mb-3">
-                            <label for="confirmPassword" class="form-label">อีเมล</label>
-                            {{ form.email }}
-                        </div>
-                        <div class="mb-3">
-                            <label for="confirmPassword" class="form-label">เบอร์โทร</label>
-                            {{ form.phone_number }}
-                        </div>
-                        <div class="mb-3">
-                            <label for="confirmPassword" class="form-label">ที่อยู่</label>
-                            {{ form.address }}
-                        </div>
-                        <div class="mb-3">
-                            <label for="confirmPassword" class="form-label">ประวัติการแพ้ยา</label>
-                            {{ form.health_detail }}
-                        </div>
-                        <div style="display: flex; justify-content: center;">
-                            <button type="submit" class="btn btn-primary" style="text-align: center; margin-bottom: 10px; margin-top: 10px; width: 100%;">ลงทะเบียน</button>
-                        </div>
-                        <div class="text-center">
-                            <span class="text-muted">มีบัญชีอยู่แล้ว? </span>
-                            <a href="{% url 'url_login' %}" class="link-primary text-decoration-none">เข้าสู่ระบบ</a>
-                        </div>
-                    </form>
+
+                    <div class="row g-4">
+                        <form method="POST">
+                            {% csrf_token %}
+                            
+                            <div class="col-12">
+                                <div class="form-floating mb-2">
+                                    {{ form.username|as_crispy_field }}
+                                </div>
+                            </div>
+                    
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-floating mb-2">
+                                        {{ form.first_name|as_crispy_field }}
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-floating mb-2">
+                                        {{ form.last_name|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div> 
+                    
+                            <div class="col-12">
+                                <div class="form-floating mb-2">
+                                    {{ form.phone_number|as_crispy_field }}
+                                </div>
+                            </div>
+                    
+                            <div class="col-12">
+                                <div class="form-floating mb-2">
+                                    {{ form.address|as_crispy_field }}
+                                </div>
+                            </div>
+                    
+                            <div class="row"> 
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-2">
+                                        {{ form.gender|as_crispy_field }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="form-floating">
+                                        {{ form.birth_date|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div> <!-- End of row -->
+                    
+                            <div class="col-12 mb-2">
+                                <div class="form-floating">
+                                    {{ form.health_detail|as_crispy_field }}
+                                </div>
+                            </div>
+                    
+                            <div class="col-12 mb-2">
+                                <div class="form-floating">
+                                    {{ form.chronic_disease|as_crispy_field }}
+                                </div>
+                            </div>
+                    
+                            <div class="col-12">
+                                <div class="form-floating mb-2">
+                                    {{ form.password1|as_crispy_field }}
+                                </div>
+                            </div>
+                    
+                            <div class="col-12">
+                                <div class="form-floating mb-2">
+                                    {{ form.password2|as_crispy_field }}
+                                </div>
+                            </div>                
+                            <div style="display: flex; justify-content: center;">
+                                <button type="submit" class="btn btn-primary" style="text-align: center; margin-bottom: 10px; margin-top: 10px; width: 100%;">ลงทะเบียน</button>
+                            </div>
+                            <div class="text-center">
+                                <span class="text-muted">มีบัญชีอยู่แล้ว? </span>
+                                <a href="{% url 'url_login' %}" class="link-primary text-decoration-none">เข้าสู่ระบบ</a>
+                            </div>
+
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

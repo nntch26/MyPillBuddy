@@ -10,16 +10,28 @@ class Doctor(models.Model):
     def __str__(self):
         return f"Dr. {self.user.first_name} {self.user.last_name}"
 
+
+
 class Patient(models.Model):
+    GENDER_CHOICES = [
+        ('male', 'ชาย'),
+        ('female', 'หญืง'),
+        ('othor', 'ไม่ระบุ'),
+    ]
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     birth_date = models.DateField(null=True)
     phone_number = models.CharField(max_length=15, unique=True)
     address = models.TextField(null=True)
     health_detail = models.TextField()
+    chronic_disease = models.CharField(max_length=255)
+    gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
     doctor = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True, related_name='patients')
 
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name}"
+
+
 
 class Medication(models.Model):
     name = models.CharField(max_length=255)
@@ -31,8 +43,8 @@ class Prescription(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     doctor = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True)
     medication = models.OneToOneField(Medication, on_delete=models.CASCADE)
-    dosage = models.CharField(max_length=50)  # เช่น 2 เม็ด
-    frequency = models.CharField(max_length=100)  # เช่น วันละ 3 ครั้ง
+    dosage = models.CharField(max_length=50)  
+    frequency = models.CharField(max_length=100)  
     description = models.TextField(blank=True)
     start_date = models.DateField()
     end_date = models.DateField()

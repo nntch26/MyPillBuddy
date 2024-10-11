@@ -1,0 +1,136 @@
+<!-- extends ก่อน ค่อย load -->
+{% extends 'temp_doctor/base_doctor.html' %} 
+{% load static %}
+
+
+
+{% block title %}หน้ารายชื่อคนไข้{% endblock title %}
+
+    <!-- Navbar -->
+    {% block navbar %}
+    <div class="header">
+        <a href="{% url 'url_doctor' %}" class="back-button">
+            <i class="bi bi-chevron-left"></i>
+        </a>
+    </div>
+    {% endblock navbar %}
+
+
+    {% block content %}
+
+    <div class="container mt-4">
+        <div class="row mb-4">
+            <div class="col">
+                <h2>รายชื่อคนไข้</h2>
+            </div>
+            <div class="col-auto">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#searchPatientModal">
+                    <i class="fas fa-plus"></i> เพิ่มคนไข้ในการดูแล
+                </button>
+            </div>
+        </div>
+
+        <!-- Search and Filter -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="ค้นหาคนไข้ในการดูแล...">
+                    <button class="btn btn-outline-secondary" type="button">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="btn-group float-md-end">
+                    <button type="button" class="btn btn-outline-primary active">ทั้งหมด</button>
+                    <button type="button" class="btn btn-outline-primary">รอพบแพทย์</button>
+                    <button type="button" class="btn btn-outline-primary">กำลังรับการรักษา</button>
+                    <button type="button" class="btn btn-outline-primary">เสร็จสิ้น</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Patient Table -->
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>HN</th>
+                        <th>ชื่อ-นามสกุล</th>
+                        <th>เบอร์โทรศัพท์</th>
+                        <th>สถานะ</th>
+                        <th>การจัดการ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>12345</td>
+                        <td>นางสาวสมหญิง รักษ์สุขภาพ</td>
+                        <td>081-234-5678</td>
+                        <td><span class="badge bg-warning">รอพบแพทย์</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                    <!-- ข้อมูลอื่นๆ เหมือนเดิม -->
+                </tbody>
+            </table>
+        </div>
+
+
+        <!-- Search Patient Modal -->
+        <div class="modal fade" id="searchPatientModal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">เพิ่มคนไข้ในการดูแล</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Search Box -->
+                        <div class="mb-4">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="พิมพ์ชื่อคนไข้ที่ต้องการเพิ่ม...">
+                                <button class="btn btn-primary">
+                                    <i class="fas fa-search"></i> ค้นหา
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Search Results -->
+                        <div class="list-group">
+                            <div class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">นายสมศักดิ์ ใจดี</h6>
+                                        <small>HN: 12350 | อายุ: 45 ปี | เบอร์โทร: 086-123-4567</small>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm">
+                                        <i class="fas fa-plus"></i> เพิ่ม
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">นางสาวสมศรี ดีใจ</h6>
+                                        <small>HN: 12351 | อายุ: 32 ปี | เบอร์โทร: 089-876-5432</small>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm">
+                                        <i class="fas fa-plus"></i> เพิ่ม
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- เพิ่มผลการค้นหาอื่นๆ ตามต้องการ -->
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock content %}
+

@@ -1,5 +1,5 @@
 <!-- extends ก่อน ค่อย load -->
-{% extends 'base_doctor.html' %} 
+{% extends 'temp_doctor/base_doctor.html' %} 
 {% load static %}
 
 
@@ -232,7 +232,7 @@
             }
         }
     </style>
-    {% endblock styles %}
+{% endblock styles %}
 
 
 </head>
@@ -270,9 +270,6 @@
                     <option>Amoxicillin 500mg</option>
                     <option>Omeprazole 20mg</option>
                 </select>
-                <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#prescribeModal">
-                    <i class="fas fa-plus me-1"></i>เพิ่มยา
-                </button>
             </div>
 
 
