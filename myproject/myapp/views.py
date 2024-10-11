@@ -9,6 +9,10 @@ class indexView(View):
     def get(self, request):
         return render(request, 'index.html')
 
+class HomeView(View):
+    def get(self, request):
+        return render(request, 'home.html')
+
 class RegisterView(View):
     def get(self, request):
         form = CustomUserCreationForm()
@@ -43,3 +47,19 @@ class LogoutView(View):
     def get(self, request):
         logout(request)
         return redirect('url_login')
+
+class ProfileView(View):
+    def get(self, request):
+        return render(request, 'profile.html')
+
+class HistoryView(View):
+    def get(self, request):
+        return render(request, 'history.html')
+
+class MedicationView(View):
+    def get(self, request):
+        return render(request, 'medication.html')
+
+class AddMedicationView(View):
+    def get(self, request):
+        return render(request, 'add_medication.html')

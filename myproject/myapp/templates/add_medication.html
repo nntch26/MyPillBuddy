@@ -234,20 +234,36 @@
 </head>
 <body>
     <div class="header">
-        <a href="index.html" class="back-button">
+        <a href="doctor.html" class="back-button">
             <i class="bi bi-chevron-left"></i>
         </a>
-        <h5 class="mb-0">เพิ่มยา</h5>
+        <h5 class="mb-0">สั่งจ่ายยาใหม่</h5>
     </div>
 
     <div class="form-container">
         <form id="medicineForm" novalidate>
-            <div class="mb-4">
-                <div class="form-floating">
-                    <input type="text" class="form-control" id="medName" placeholder="กรอกชื่อยา" required>
-                    <label for="medName">ชื่อยา</label>
-                </div>
+
+            <div class="mb-3">
+                <label class="form-label">เลือกคนไข้</label>
+                <select class="form-select">
+                    <option>นางสาวสมหญิง รักษ์สุขภาพ</option>
+                    <option>นายสมชาย สุขสันต์</option>
+                    <option>เด็กหญิงน้ำใส ใจดี</option>
+                </select>
             </div>
+
+            <div class="mb-3">
+                <label class="form-label">เลือกยา</label>
+                <select class="form-select mb-2">
+                    <option>Paracetamol 500mg</option>
+                    <option>Amoxicillin 500mg</option>
+                    <option>Omeprazole 20mg</option>
+                </select>
+                <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#prescribeModal">
+                    <i class="fas fa-plus me-1"></i>เพิ่มยา
+                </button>
+            </div>
+
 
             <div class="mb-4">
                 <label class="form-label">ช่วงเวลา</label>
@@ -302,11 +318,36 @@
             </div>
 
             <div class="submit-container">
-                <button type="submit" class="submit-button">
-                    บันทึก
-                </button>
+                <button type="submit" class="submit-button">บันทึกการสั่งจ่ายยา</button>
             </div>
         </form>
+    </div>
+
+
+    <!-- Modal สั่งจ่ายยา -->
+    <div class="modal fade" id="prescribeModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">เพิ่มยา</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-4">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="medName" placeholder="กรอกชื่อยา" required>
+                                <label for="medName">ชื่อยา</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                    <button type="button" class="btn btn-primary">บันทึกยา</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
