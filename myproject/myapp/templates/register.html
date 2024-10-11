@@ -125,10 +125,12 @@
                                 <div class="form-floating mb-2">
                                     {{ form.password2|as_crispy_field }}
                                 </div>
-                            </div>                
+                            </div>
+
                             <div style="display: flex; justify-content: center;">
                                 <button type="submit" class="btn btn-primary" style="text-align: center; margin-bottom: 10px; margin-top: 10px; width: 100%;">ลงทะเบียน</button>
                             </div>
+
                             <div class="text-center">
                                 <span class="text-muted">มีบัญชีอยู่แล้ว? </span>
                                 <a href="{% url 'url_login' %}" class="link-primary text-decoration-none">เข้าสู่ระบบ</a>
