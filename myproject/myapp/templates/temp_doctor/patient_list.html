@@ -46,8 +46,8 @@
                     {% for p in patient_list %}
                     <tr>
                         <td>{{ p.id }}</td>
-                        <td>{{ p.first_name }} {{ p.last_name }}</td>
-                        <td>{{ p.patient.phone_number }}</td>
+                        <td>{{ p.user.first_name }} {{ p.user.last_name }}</td>
+                        <td>{{ p.phone_number }}</td>
                         <td>
                             <a href="{% url 'url_delpatient' p.id %}" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></a>
                         </td>
@@ -70,38 +70,32 @@
                         <!-- Search Box -->
                         <div class="mb-4">
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="พิมพ์ชื่อคนไข้ที่ต้องการเพิ่ม...">
-                                <button class="btn btn-primary">
-                                    <i class="fas fa-search"></i> ค้นหา
-                                </button>
+
+                                <form  action="{% url 'seach' %}" method="get">
+                                    <input type="text"  placeholder="พิมพ์หมายเลขคนไข้.." name="search" class="form-search">
+                                    <button type="submit" class="btn btn-primary"><i class="bi bi-search me-2"></i>ค้นหา</button>
+                                </form>
+                        
                             </div>
                         </div>
 
                         <!-- Search Results -->
                         <div class="list-group">
+
+                            {% for p_all in patient_all %}
                             <div class="list-group-item list-group-item-action">
                                 <div class="d-flex w-100 justify-content-between align-items-center">
                                     <div>
-                                        <h6 class="mb-1">นายสมศักดิ์ ใจดี</h6>
-                                        <small>HN: 12350 | อายุ: 45 ปี | เบอร์โทร: 086-123-4567</small>
+                                        <h6 class="mb-1">{{ p_all.first_name }} {{ p_all.last_name }}</h6>
+                                        <small>HN: {{ p_all.id }} | เบอร์โทร: {{ p_all.patient.phone_number }}</small>
                                     </div>
-                                    <button class="btn btn-primary btn-sm">
+                                    <a href="{% url 'url_addpatient' p_all.id %}"  class="btn btn-primary btn-sm">
                                         <i class="fas fa-plus"></i> เพิ่ม
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
-                            <div class="list-group-item list-group-item-action">
-                                <div class="d-flex w-100 justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="mb-1">นางสาวสมศรี ดีใจ</h6>
-                                        <small>HN: 12351 | อายุ: 32 ปี | เบอร์โทร: 089-876-5432</small>
-                                    </div>
-                                    <button class="btn btn-primary btn-sm">
-                                        <i class="fas fa-plus"></i> เพิ่ม
-                                    </button>
-                                </div>
-                            </div>
-                            <!-- เพิ่มผลการค้นหาอื่นๆ ตามต้องการ -->
+                            {% endfor %}
+
                         </div>
                     </div>
                     <div class="modal-footer">

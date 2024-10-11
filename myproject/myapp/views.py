@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.views import View
 from django.db.models import F, Q, Count, Value as V, Avg, Max, Min
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
@@ -46,7 +46,20 @@ class LoginView(View):
         if form.is_valid():
             user = form.get_user() 
             login(request,user)
-            return redirect('home')
+
+            #ดึงเอา group ของผู้ใช้คนนี้ อันนี้ผู้ใช้มีแค่คนละ group เดียว
+            user_groups = user.groups.all()
+            for group in user_groups:
+                print(group.name)  
+
+            # ผู้ใช้ตรงกับ group ไหน เด้งไปหน้านั้น
+            if group.name == "doctor":
+                login(request, user)
+                return redirect('url_doctor')
+            else:
+                login(request, user)
+                return redirect('home')
+            
         return render(request, 'login.html', {'form': form})
     
 
@@ -88,12 +101,29 @@ class DoctorView(View):
 
 class PatientListView(View):
     def get(self, request):
-        patient_list = User.objects.exclude(
+        data = request.GET.get('search', '')
+
+        if data:
+            # ค้นหาคนไข้จาก ID หรืออื่นๆ
+            patient_all = User.objects.filter(pk = data)
+        else:
+            patient_all = User.objects.exclude(
             Q(username__startswith='admin') | 
             Q(username__startswith='doctor') ) 
-        # ไม่เอา admin staff doctor
+            # ไม่เอา admin staff doctor
 
-        return render(request, 'temp_doctor/patient_list.html', {'patient_list':patient_list})
+        doctor = get_object_or_404(Doctor, user=request.user)# หมอที่ล็อกอินอยู่
+        patient_list = Patient.objects.filter(doctor=doctor)
+        # แสดงเฉพาะคนไข้ของหมอที่ล๊อคอินอยู่
+        print(patient_list)
+
+        context = {
+            'patient_list':patient_list,
+            'patient_all':patient_all
+        }
+
+        return render(request, 'temp_doctor/patient_list.html', context)
+    
 
 class PatientDelView(View):
 
@@ -104,5 +134,11 @@ class PatientDelView(View):
     
 
 class PatientAddView(View):
-    def get(self, request):
-        return render(request, 'temp_doctor/patient_list.html')
+    def get(self, request, patient_id):
+        
+        doctor = get_object_or_404(Doctor, user=request.user)# หมอที่ล็อกอินอยู่
+        patient = get_object_or_404(Patient, id=patient_id) # หา id คนไข้
+
+        # เพิ่มคนไข้ให้กับหมอ
+        doctor.patients.add(patient)
+        return redirect('url_patientlist')
