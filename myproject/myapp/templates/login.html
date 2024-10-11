@@ -61,7 +61,9 @@
                             <label for="loginPassword" class="form-label">รหัสผ่าน</label>
                             {{ form.password }}
                         </div>
-                        <button type="submit" class="btn btn-primary w-100 mb-3">เข้าสู่ระบบ</button>
+                        <div style="display: flex; justify-content: center;">
+                            <button type="submit" class="btn btn-primary" style="text-align: center; margin-bottom: 10px; margin-top: 10px; width: 100%;">เข้าสู่ระบบ</button>
+                        </div>
                         <div class="text-center">
                             <span class="text-muted">ยังไม่มีบัญชี? </span>
                             <a href="{% url 'url_register' %}" class="link-primary text-decoration-none" onclick="">ลงทะเบียน</a>

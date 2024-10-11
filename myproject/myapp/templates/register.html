@@ -94,7 +94,9 @@
                             <label for="confirmPassword" class="form-label">ประวัติการแพ้ยา</label>
                             {{ form.health_detail }}
                         </div>
-                        <button type="submit" class="btn btn-primary w-100 mb-3" style="">ลงทะเบียน</button>
+                        <div style="display: flex; justify-content: center;">
+                            <button type="submit" class="btn btn-primary" style="text-align: center; margin-bottom: 10px; margin-top: 10px; width: 100%;">ลงทะเบียน</button>
+                        </div>
                         <div class="text-center">
                             <span class="text-muted">มีบัญชีอยู่แล้ว? </span>
                             <a href="{% url 'url_login' %}" class="link-primary text-decoration-none">เข้าสู่ระบบ</a>

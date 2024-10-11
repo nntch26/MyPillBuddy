@@ -28,7 +28,7 @@ class RegisterView(View):
                 address = form.cleaned_data["address"],
                 health_detail = form.cleaned_data["health_detail"]
             )
-            return redirect('index')
+            return redirect('home')
         return render(request, 'register.html', {'form': form})
     
 class LoginView(View):
@@ -40,7 +40,7 @@ class LoginView(View):
         if form.is_valid():
             user = form.get_user() 
             login(request,user)
-            return redirect('index')
+            return redirect('home')
         return render(request, 'login.html', {'form': form})
     
 class LogoutView(View):
