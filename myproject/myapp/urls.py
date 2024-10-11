@@ -15,9 +15,12 @@ urlpatterns = [
 
     # doctor
     path("doctor/", DoctorView.as_view(), name="url_doctor"),
+    path("Prescription/", PrescriptionView.as_view(), name="url_prescription"),
+
     path("ShowMedication/", ShowMedicationView.as_view(), name="url_showmedication"),
     path("DeleteMedication/<int:id>/", DeleteMedicationView.as_view(), name="url_deletemedication"),
     path("EditMedication/<int:id>/", EditMedicationView.as_view(), name="url_editmedication"),
+
 
     path("patient_list/", PatientListView.as_view(), name="url_patientlist"),
     path("patient_list/add/<int:patient_id>", PatientAddView.as_view(), name="url_addpatient"),

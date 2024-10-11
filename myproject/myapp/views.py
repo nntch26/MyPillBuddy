@@ -85,6 +85,7 @@ class MedicationView(View):
 
 
 # Doctor
+#//////////////////// จัดการยา ///////////////////
 class ShowMedicationView(View):
     def get(self, request):
         medication = Medication.objects.all()
@@ -119,11 +120,22 @@ class EditMedicationView(View):
         context = {"form":form}
         return render(request, 'temp_doctor/show_medication.html', context)
 
+
+#//////////////////// หน้าหลัก ///////////////////
+
 class DoctorView(View):
     def get(self, request):
         return render(request, 'temp_doctor/doctor.html')
     
 
+#//////////////////// สั่งยา ///////////////////
+
+class PrescriptionView(View):
+    def get(self, request):
+        return render(request, 'temp_doctor/prescription.html')
+
+
+#//////////////////// รายชื่อคนไข้ ///////////////////
 
 class PatientListView(View):
     def get(self, request):
