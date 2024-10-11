@@ -9,9 +9,9 @@ services:
     volumes:
       - .:/app/myapp
     depends_on:
-      - db
+      - localhost
 
-  db:
+  localhost:
     image: postgres:13
     environment:
       POSTGRES_DB: mydb # ชื่อ database
