@@ -3,7 +3,7 @@ from django.views import View
 from django.db.models import F, Q, Count, Value as V, Avg, Max, Min
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import logout, login, authenticate, update_session_auth_hash
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, AddMedicationForm
 from .models import *
 
 class indexView(View):
@@ -87,11 +87,37 @@ class MedicationView(View):
 # Doctor
 class ShowMedicationView(View):
     def get(self, request):
-        return render(request, 'temp_doctor/show_medication.html')
+        medication = Medication.objects.all()
+        form = AddMedicationForm()
+        context = {"form":form, 'medication':medication}
+        return render(request, 'temp_doctor/show_medication.html', context)
     
-class AddMedicationView(View):
-    def get(self, request):
-        return render(request, 'temp_doctor/add_medication.html')
+    # AddMedication
+    def post(self, request):
+        form = AddMedicationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('url_showmedication')
+        context = {'form':form}
+        return  render(request, 'temp_doctor/show_medication.html', context)
+
+class DeleteMedicationView(View):
+    def get(self, request, id): 
+        medication = Medication.objects.get(id=id)
+        medication.delete()
+        return redirect('url_showmedication')
+    
+class EditMedicationView(View):
+    def get(self, request, id):
+        medication = Medication.objects.get(id=id)
+        form = AddMedicationForm(instance=medication)
+        if form.is_valid():
+            form.save()
+            print('save')
+            return  redirect('url_showmedication')
+        print('unsave')
+        context = {"form":form}
+        return render(request, 'temp_doctor/show_medication.html', context)
 
 class DoctorView(View):
     def get(self, request):
