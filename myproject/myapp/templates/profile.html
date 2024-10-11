@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ข้อมูลผู้ป่วย</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2196f3;
+            --primary-dark: #1976d2;
+            --primary-light: #bbdefb;
+        }
+        
+        .profile-header {
+            background-color: var(--primary-color);
+            border-radius: 0 0 20px 20px;
+            padding: 20px;
+            color: white;
+        }
+        
+        .profile-img {
+            width: 120px;
+            height: 120px;
+            background-color: white;
+            border-radius: 50%;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 4px solid var(--primary-light);
+        }
+        
+        .profile-img i {
+            font-size: 60px;
+            color: var(--primary-color);
+        }
+        
+        .doctor-card {
+            border-left: 4px solid var(--primary-color);
+            margin-bottom: 15px;
+            transition: transform 0.2s;
+        }
+        
+        .doctor-card:hover {
+            transform: translateX(5px);
+        }
+        
+        .controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        
+        .control-btn {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            margin-left: 10px;
+            transition: background-color 0.3s;
+        }
+        
+        .control-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(33, 150, 243, 0.25);
+        }
+        
+        .doctor-icon {
+            background-color: var(--primary-color) !important;
+        }
+        
+        .hospital-name {
+            color: var(--primary-color) !important;
+        }
+        
+        .form-floating > label {
+            color: #666;
+        }
+        
+        .form-control, .form-select {
+            border: 1px solid #ddd;
+        }
+        
+        .section-title {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container-fluid p-0">
+        <!-- Profile Header -->
+        <div class="profile-header position-relative mb-4">
+            <!-- <div class="controls">
+                <button class="control-btn">
+                    <i class="fas fa-volume-up"></i>
+                </button>
+                <button class="control-btn">
+                    <i class="fas fa-font"></i>
+                </button>
+            </div>
+             -->
+            <div class="text-center mb-4">
+                <div class="profile-img mb-3">
+                    <i class="fas fa-user"></i>
+                </div>
+                <h4>ข้อมูลส่วนตัว</h4>
+            </div>
+
+            <div class="container">
+                <div class="row g-3">
+                    <div class="col-6">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="firstname" placeholder="ชื่อ">
+                            <label for="firstname">ชื่อ</label>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="lastname" placeholder="นามสกุล">
+                            <label for="lastname">นามสกุล</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <select class="form-select" id="gender">
+                                <option selected disabled>เลือกเพศ</option>
+                                <option value="male">ชาย</option>
+                                <option value="female">หญิง</option>
+                                <option value="other">อื่นๆ</option>
+                            </select>
+                            <label for="gender">เพศ</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input type="date" class="form-control" id="birthdate">
+                            <label for="birthdate">วันเกิด</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="bloodType" placeholder="กรุ๊ปเลือด">
+                            <label for="bloodType">กรุ๊ปเลือด</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-floating">
+                            <textarea class="form-control" id="medicalHistory" style="height: 100px" placeholder="ประวัติแพ้ยา"></textarea>
+                            <label for="medicalHistory">ประวัติแพ้ยา</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="chronicDiseases" placeholder="โรคประจำตัว">
+                            <label for="chronicDiseases">โรคประจำตัว</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Doctor Information -->
+        <div class="container mb-4">
+            <h4 class="section-title">
+                <i class="fas fa-user-md me-2"></i>
+                ข้อมูลแพทย์ที่ดูแล
+            </h4>
+            
+            <div class="doctor-card bg-white p-3 shadow-sm">
+                <div class="row align-items-center">
+                    <div class="col-auto">
+                        <div class="rounded-circle doctor-icon text-white p-3">
+                            <i class="fas fa-user-md fa-2x"></i>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <h5 class="mb-1">นพ. สมชาย ใจดี</h5>
+                        <p class="mb-1 text-muted">แผนกอายุรกรรม</p>
+                        <small class="hospital-name">โรงพยาบาลศิริราช</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="doctor-card bg-white p-3 shadow-sm">
+                <div class="row align-items-center">
+                    <div class="col-auto">
+                        <div class="rounded-circle doctor-icon text-white p-3">
+                            <i class="fas fa-user-md fa-2x"></i>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <h5 class="mb-1">พญ. สมหญิง รักษาดี</h5>
+                        <p class="mb-1 text-muted">แผนกกระดูกและข้อ</p>
+                        <small class="hospital-name">โรงพยาบาลจุฬาลงกรณ์</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
