@@ -14,9 +14,10 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
-{% block style %}
+{% block styles %}
 
-    :root {
+    <style>
+        :root {
         --primary-color: #2196f3;
         --primary-dark: #1976d2;
         --primary-light: #bbdefb;
@@ -144,7 +145,8 @@
         border: none;
         box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
-{% endblock style %}
+    </style>
+{% endblock styles %}
 {% block content %}
 <body>
     <!-- Header -->
