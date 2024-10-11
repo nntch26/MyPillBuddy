@@ -61,6 +61,8 @@ pipeline {
                     sh 'docker pull $DOCKER_IMAGE'
                     // Run the Docker container
                     sh 'docker run -d --name devtools_app -p 8085:80 $DOCKER_IMAGE'
+                    // Check the container's status
+                    sh 'docker ps -a | grep devtools_app'
                 }
             }
         }
