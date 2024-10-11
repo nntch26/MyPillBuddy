@@ -8,7 +8,7 @@ services:
       - "8000:8000"
     volumes:
       - .:/app  # Map the root project directory
-    working_dir: /app  # Ensure the container starts in the right directory
+    working_dir: /app/myapp  # Ensure the container starts in the right directory
     depends_on:
       - localhost  # Changed from localhost to db
 
