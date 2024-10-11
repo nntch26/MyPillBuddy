@@ -7,16 +7,16 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - .:/app  # Changed volume mount to match the project structure
+      - .:/app
     depends_on:
-      - db
+      - localhost
 
-  db:
+  localhost:
     image: postgres:13
     environment:
-      POSTGRES_DB: mydb
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 0000
+      POSTGRES_DB: mydb # ชื่อ database
+      POSTGRES_USER: postgres 
+      POSTGRES_PASSWORD: 0000 # password database
     ports:
       - "5432:5432"
     expose:
