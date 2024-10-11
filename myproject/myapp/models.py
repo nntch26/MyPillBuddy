@@ -2,23 +2,24 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 
-class Patient(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    birth_date = models.DateField(null=True)
-    phone_number = models.CharField(max_length=15, unique=True)
-    address = models.TextField(null=True)
-    health_detail = models.TextField()
-    
-    def __str__(self):
-        return f"{self.user.first_name} {self.user.last_name}"
-
 class Doctor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     specialization = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=15)
 
     def __str__(self):
-        return f"{self.user.first_name} {self.user.last_name}" 
+        return f"Dr. {self.user.first_name} {self.user.last_name}"
+
+class Patient(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    birth_date = models.DateField(null=True)
+    phone_number = models.CharField(max_length=15, unique=True)
+    address = models.TextField(null=True)
+    health_detail = models.TextField()
+    doctor = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True, related_name='patients')
+
+    def __str__(self):
+        return f"{self.user.first_name} {self.user.last_name}"
 
 class Medication(models.Model):
     name = models.CharField(max_length=255)
