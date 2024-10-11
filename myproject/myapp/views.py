@@ -20,14 +20,15 @@ class RegisterView(View):
     def post(self, request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            form.save()
-            # patient = form.save()
-            # Patient.objects.create(
-            #     user = patient,
-            #     phone_number = form.cleaned_data["phone_number"],
-            #     health_detail = form.cleaned_data["health_detail"]
-            # )
-            return redirect('url_login')
+            patient = form.save()
+            Patient.objects.create(
+                user = patient,
+                phone_number = form.cleaned_data["phone_number"],
+                birth_date = form.cleaned_data["birth_date"],
+                address = form.cleaned_data["address"],
+                health_detail = form.cleaned_data["health_detail"]
+            )
+            return redirect('home')
         return render(request, 'register.html', {'form': form})
     
 class LoginView(View):
@@ -39,7 +40,7 @@ class LoginView(View):
         if form.is_valid():
             user = form.get_user() 
             login(request,user)
-            return redirect('index')
+            return redirect('home')
         return render(request, 'login.html', {'form': form})
     
 class LogoutView(View):
