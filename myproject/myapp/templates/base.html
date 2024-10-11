@@ -27,20 +27,16 @@
     {% endblock styles %}
 <body> 
 
+    
+    
+    {% block content %}
+    
+    {% endblock content%}
+    
+    
     {% block navbar %}
         {% include 'navbar.html' %}
     {% endblock navbar%}
-
-
-    {% block content %}
-
-    {% endblock content%}
-
-
-    {% block footer %}
-
-    {% endblock footer %}
-        
 </body>
 
 {% block script %}
