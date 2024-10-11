@@ -4,15 +4,13 @@ from django.utils import timezone
 
 class Patient(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=150)
-    last_name = models.CharField(max_length=150)
-    birth_date = models.DateField()
+    birth_date = models.DateField(null=True)
     phone_number = models.CharField(max_length=15, unique=True)
-    address = models.TextField()
+    address = models.TextField(null=True)
     health_detail = models.TextField()
-
+    
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"       
+        return self.full_name
 
 class Doctor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

@@ -44,73 +44,27 @@
                 <!-- Login Form -->
                 <div class="auth-card p-4" id="loginForm">
                     <div class="d-flex align-items-center mb-4">
-                        <button class="btn btn-link text-dark p-0" onclick="toggleForms()">
-                            <i class="bi bi-arrow-left fs-4"></i>
-                        </button>
                         <h4 class="text-center flex-grow-1 mb-0">เข้าสู่ระบบ</h4>
                     </div>
-                    <form>
+                    <form method="POST">
+                        {% csrf_token %}
                         <div class="mb-3">
-                            <label for="loginEmail" class="form-label">อีเมล</label>
-                            <input type="email" class="form-control" id="loginEmail" placeholder="กรุณากรอกอีเมล">
+                            <label for="loginEmail" class="form-label">Username</label>
+                            {{ form.username }}
                         </div>
                         <div class="mb-3">
                             <label for="loginPassword" class="form-label">รหัสผ่าน</label>
-                            <input type="password" class="form-control" id="loginPassword" placeholder="กรุณากรอกรหัสผ่าน">
+                            {{ form.password }}
                         </div>
                         <button type="submit" class="btn btn-primary w-100 mb-3">เข้าสู่ระบบ</button>
                         <div class="text-center">
                             <span class="text-muted">ยังไม่มีบัญชี? </span>
-                            <a href="#" class="link-primary text-decoration-none" onclick="toggleForms()">ลงทะเบียน</a>
-                        </div>
-                    </form>
-                </div>
-
-                <!-- Register Form -->
-                <div class="auth-card p-4" id="registerForm" style="display: none;">
-                    <div class="d-flex align-items-center mb-4">
-                        <button class="btn btn-link text-dark p-0" onclick="toggleForms()">
-                            <i class="bi bi-arrow-left fs-4"></i>
-                        </button>
-                        <h4 class="text-center flex-grow-1 mb-0">ลงทะเบียน</h4>
-                    </div>
-                    <form>
-                        <div class="mb-3">
-                            <label for="registerEmail" class="form-label">อีเมล</label>
-                            <input type="email" class="form-control" id="registerEmail" placeholder="กรุณากรอกอีเมล">
-                        </div>
-                        <div class="mb-3">
-                            <label for="registerPassword" class="form-label">รหัสผ่าน</label>
-                            <input type="password" class="form-control" id="registerPassword" placeholder="กรุณากรอกรหัสผ่าน">
-                        </div>
-                        <div class="mb-3">
-                            <label for="confirmPassword" class="form-label">ยืนยันรหัสผ่าน</label>
-                            <input type="password" class="form-control" id="confirmPassword" placeholder="กรุณายืนยันรหัสผ่าน">
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100 mb-3">ลงทะเบียน</button>
-                        <div class="text-center">
-                            <span class="text-muted">มีบัญชีอยู่แล้ว? </span>
-                            <a href="#" class="link-primary text-decoration-none" onclick="toggleForms()">เข้าสู่ระบบ</a>
+                            <a href="{% url 'url_register' %}" class="link-primary text-decoration-none" onclick="">ลงทะเบียน</a>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
-    <script>
-        function toggleForms() {
-            const loginForm = document.getElementById('loginForm');
-            const registerForm = document.getElementById('registerForm');
-            if (loginForm.style.display === 'none') {
-                loginForm.style.display = 'block';
-                registerForm.style.display = 'none';
-            } else {
-                loginForm.style.display = 'none';
-                registerForm.style.display = 'block';
-            }
-        }
-    </script>
 </body>
 </html>
