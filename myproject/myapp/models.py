@@ -10,17 +10,15 @@ class Patient(models.Model):
     health_detail = models.TextField()
     
     def __str__(self):
-        return self.full_name
+        return f"{self.user.first_name} {self.user.last_name}"
 
 class Doctor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=150)
-    last_name = models.CharField(max_length=150)
     specialization = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=15)
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}" 
+        return f"{self.user.first_name} {self.user.last_name}" 
 
 class Medication(models.Model):
     name = models.CharField(max_length=255)
