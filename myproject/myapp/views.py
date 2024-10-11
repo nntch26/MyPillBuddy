@@ -20,11 +20,7 @@ class RegisterView(View):
     
     def post(self, request):
         form = CustomUserCreationForm(request.POST)
-        print(form)
-        print(form.errors)
-
         if form.is_valid():
-            print("55555555")
             patient = form.save()
             Patient.objects.create(
                 user = patient,
@@ -61,7 +57,9 @@ class LogoutView(View):
 
 class ProfileView(View):
     def get(self, request):
-        return render(request, 'profile.html')
+        patient = Patient.objects.get(id=request.user.id)
+        box = {'patient': patient}
+        return render(request, 'profile.html', box)
 
 class HistoryView(View):
     def get(self, request):

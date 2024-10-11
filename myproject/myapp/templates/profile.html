@@ -134,56 +134,57 @@
                 <div class="profile-img mb-3">
                     <i class="fas fa-user"></i>
                 </div>
-                <h4>ข้อมูลส่วนตัว</h4>
+                <h4>ข้อมูลส่วนตัว<p style="font-size: 15px;">UserID: {{user.id}}</p></h4>
             </div>
 
             <div class="container">
-                <div class="row g-3">
+                <div class="row g-3">   
                     <div class="col-6">
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="firstname" placeholder="ชื่อ">
+                            <input type="text" class="form-control" id="firstname" placeholder="ชื่อ" value="{{user.first_name}}" readonly>
                             <label for="firstname">ชื่อ</label>
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="lastname" placeholder="นามสกุล">
+                            <input type="text" class="form-control" id="lastname" placeholder="นามสกุล" value="{{user.last_name}}" readonly>
                             <label for="lastname">นามสกุล</label>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-floating">
-                            <select class="form-select" id="gender">
-                                <option selected disabled>เลือกเพศ</option>
-                                <option value="male">ชาย</option>
-                                <option value="female">หญิง</option>
-                                <option value="other">อื่นๆ</option>
-                            </select>
+                            <input type="text" class="form-control" id="lastname" placeholder="เพศ" value="{{patient.gender}}" readonly>
                             <label for="gender">เพศ</label>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-floating">
-                            <input type="date" class="form-control" id="birthdate">
+                            <input type="text" class="form-control" id="birthdate" value="{{patient.birth_date}}" readonly>
                             <label for="birthdate">วันเกิด</label>
                         </div>
                     </div>
-                    <div class="col-12">
+                    <div class="col-md-6">
                         <div class="form-floating">
-                            <input type="text" class="form-control" id="bloodType" placeholder="กรุ๊ปเลือด">
-                            <label for="bloodType">กรุ๊ปเลือด</label>
+                            <input type="text" class="form-control" id="phonenumber" placeholder="เบอร์โทร" value="{{patient.phone_number}}" readonly>
+                            <label for="phonenumber">เบอร์โทร</label>
                         </div>
                     </div>
-                    <div class="col-12">
+                    <div class="col-md-6">
                         <div class="form-floating">
-                            <textarea class="form-control" id="medicalHistory" style="height: 100px" placeholder="ประวัติแพ้ยา"></textarea>
-                            <label for="medicalHistory">ประวัติแพ้ยา</label>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" id="chronicDiseases" placeholder="โรคประจำตัว">
+                            <input type="text" class="form-control" id="chronicDiseases" placeholder="โรคประจำตัว" value="{{patient.chronic_disease}}" readonly>
                             <label for="chronicDiseases">โรคประจำตัว</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <textarea class="form-control" id="address" style="height: 100px" placeholder="ที่อยู่" readonly>{{patient.address}}</textarea>
+                            <label for="address">ที่อยู่</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <textarea class="form-control" id="medicalHistory" style="height: 100px" placeholder="ประวัติแพ้ยา" readonly>{{patient.health_detail}}</textarea>
+                            <label for="medicalHistory">ประวัติแพ้ยา</label>
                         </div>
                     </div>
                 </div>
