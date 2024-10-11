@@ -109,11 +109,14 @@ class PatientListView(View):
         else:
             patient_all = User.objects.exclude(
             Q(username__startswith='admin') | 
-            Q(username__startswith='doctor') ) 
+            Q(username__startswith='doctor')|
+            Q(patient__doctor__isnull=False)
+            ) 
             # ไม่เอา admin staff doctor
 
         doctor = get_object_or_404(Doctor, user=request.user)# หมอที่ล็อกอินอยู่
         patient_list = Patient.objects.filter(doctor=doctor)
+
         # แสดงเฉพาะคนไข้ของหมอที่ล๊อคอินอยู่
         print(patient_list)
 
