@@ -1,275 +1,206 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+<!-- extends ก่อน ค่อย load -->
+{% extends 'base_doctor.html' %} 
+{% load static %}
 
-    <style>
-        :root {
-            --primary-blue: #2196F3;
-            --light-blue: #E3F2FD;
-        }
 
-        body {
-            background-color: #f5f5f5;
-        }
 
-        .sidebar {
-            height: 100vh;
-            background-color: white;
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 250px;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-            padding-top: 20px;
-        }
+{% block title %}หน้าจัดการ{% endblock title %}
 
-        .main-content {
-            margin-left: 250px;
-            padding: 20px;
-        }
+{% block styles %}
+<style>
+    :root {
+        --primary-blue: #2196F3;
+        --light-blue: #E3F2FD;
+    }
 
-        .nav-link {
-            color: #333;
-            padding: 10px 20px;
-        }
+    body {
+        background-color: #f5f5f5;
+    }
 
-        .nav-link:hover, .nav-link.active {
-            background-color: var(--light-blue);
-            color: var(--primary-blue);
-        }
+    .sidebar {
+        height: 100vh;
+        background-color: white;
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 250px;
+        box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        padding-top: 20px;
+    }
 
-        .card {
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
+    .main-content {
+        margin-left: 250px;
+        padding: 20px;
+    }
 
-        .patient-card:hover {
-            background-color: var(--light-blue);
-            cursor: pointer;
-        }
+    .nav-link {
+        color: #333;
+        padding: 10px 20px;
+    }
 
-        .profile-img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
+    .nav-link:hover, .nav-link.active {
+        background-color: var(--light-blue);
+        color: var(--primary-blue);
+    }
 
-        .search-bar {
-            border-radius: 20px;
-            border: 1px solid #ddd;
-            padding: 8px 15px;
-        }
+    .card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+    }
 
-        .btn-primary {
-            background-color: var(--primary-blue);
-            border: none;
-            border-radius: 5px;
-        }
+    .patient-card:hover {
+        background-color: var(--light-blue);
+        cursor: pointer;
+    }
 
-        .medicine-item {
-            border-bottom: 1px solid #eee;
-            padding: 10px 0;
-        }
+    .profile-img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
 
-        .status-badge {
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 0.8rem;
-        }
-    </style>
-</head>
-<body>
-    <div class="sidebar">
-        <div class="text-center mb-4">
-            <img src="/api/placeholder/80/80" alt="Doctor Profile" class="profile-img mb-2" style="width: 80px; height: 80px;">
-            <h6 class="mb-0">นพ. สมชาย ใจดี</h6>
-            <small class="text-muted">แพทย์ผู้เชี่ยวชาญ</small>
+    .search-bar {
+        border-radius: 20px;
+        border: 1px solid #ddd;
+        padding: 8px 15px;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-blue);
+        border: none;
+        border-radius: 5px;
+    }
+
+    .medicine-item {
+        border-bottom: 1px solid #eee;
+        padding: 10px 0;
+    }
+
+    .status-badge {
+        padding: 5px 10px;
+        border-radius: 15px;
+        font-size: 0.8rem;
+    }
+</style>
+
+{% endblock styles %}
+
+
+
+{% block content %}
+
+
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row mb-4">
+            <div class="col">
+                <h4>ระบบจัดการยาสำหรับแพทย์</h4>
+            </div>
+            <div class="col-auto">
+                <a href="{% url 'url_addmedication' %}" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>สั่งจ่ายยาใหม่
+                </a>
+            </div>
         </div>
-        <div class="nav flex-column">
-            <a href="#home" class="nav-link active">
-                <i class="fas fa-home me-2"></i> หน้าหลัก
-            </a>
-            <a href="#" class="nav-link">
-                <i class="fas fa-user-injured me-2"></i> รายชื่อคนไข้
-            </a>
-            <a href="#" class="nav-link">
-                <i class="fas fa-pills me-2"></i> จัดการยา
-            </a>
-        </div>
-    </div>
 
-    <div class="main-content" id="home">
-        <div class="container-fluid">
-            <div class="row mb-4">
-                <div class="col">
-                    <h1>ระบบจัดการยาสำหรับแพทย์</h1>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">รายชื่อคนไข้</h5>
+                        <input type="text" class="form-control search-bar mb-4" placeholder="ค้นหาคนไข้...">
+                        
+                        <div class="patient-list">
+                            <div class="patient-card p-3 d-flex align-items-center mb-2">
+                                <i class="fas fa-user profile-img me-3"></i>
+                                <div>
+                                    <h6 class="mb-1">นางสาวสมหญิง รักษ์สุขภาพ</h6>
+                                    <small class="text-muted">HN: 12345 • อายุ: 35 ปี</small>
+                                </div>
+                                <span class="ms-auto badge bg-success status-badge">มาตามนัด</span>
+                            </div>
+
+                            <div class="patient-card p-3 d-flex align-items-center mb-2">
+                                <i class="fas fa-user profile-img me-3"></i>
+                                <div>
+                                    <h6 class="mb-1">นายสมชาย สุขสันต์</h6>
+                                    <small class="text-muted">HN: 12346 • อายุ: 42 ปี</small>
+                                </div>
+                                <span class="ms-auto badge bg-warning status-badge">รอพบแพทย์</span>
+                            </div>
+
+                            <div class="patient-card p-3 d-flex align-items-center mb-2">
+                                <i class="fas fa-user profile-img me-3"></i>
+                                <div>
+                                    <h6 class="mb-1">เด็กหญิงน้ำใส ใจดี</h6>
+                                    <small class="text-muted">HN: 12347 • อายุ: 12 ปี</small>
+                                </div>
+                                <span class="ms-auto badge bg-info status-badge">นัดติดตามผล</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-auto">
-                    <a href="add_medication.html"  class="btn btn-primary">
-                        <i class="fas fa-plus me-2"></i>สั่งจ่ายยาใหม่
-                    </a>
+
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">ประวัติการจ่ายยาล่าสุด</h5>
+                        <div class="medicine-list">
+                            <div class="medicine-item d-flex align-items-center">
+                                <div>
+                                    <h6 class="mb-1">นางสาวสมหญิง รักษ์สุขภาพ</h6>
+                                    <small class="text-muted">Paracetamol 500mg - 1 เม็ด ทุก 6 ชั่วโมง</small>
+                                </div>
+                                <small class="ms-auto text-muted">15 นาทีที่แล้ว</small>
+                            </div>
+
+                            <div class="medicine-item d-flex align-items-center">
+                                <div>
+                                    <h6 class="mb-1">นายสมชาย สุขสันต์</h6>
+                                    <small class="text-muted">Amoxicillin 500mg - 1 เม็ด วันละ 3 ครั้ง</small>
+                                </div>
+                                <small class="ms-auto text-muted">1 ชั่วโมงที่แล้ว</small>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-md-8">
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <h5 class="card-title mb-3">รายชื่อคนไข้</h5>
-                            <input type="text" class="form-control search-bar mb-4" placeholder="ค้นหาคนไข้...">
-                            
-                            <div class="patient-list">
-                                <div class="patient-card p-3 d-flex align-items-center mb-2">
-                                    <i class="bi bi-person-circle profile-img"></i>
-                                    <div>
-                                        <h6 class="mb-1">นางสาวสมหญิง รักษ์สุขภาพ</h6>
-                                        <small class="text-muted">HN: 12345 • อายุ: 35 ปี</small>
-                                    </div>
-                                    <span class="ms-auto badge bg-success status-badge">มาตามนัด</span>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">รายการยาที่ใช้บ่อย</h5>
+                        <div class="list-group">
+                            <a href="#" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">Paracetamol 500mg</h6>
+                                    <small class="text-muted">ยาแก้ปวด</small>
                                 </div>
-
-                                <div class="patient-card p-3 d-flex align-items-center mb-2">
-                                    <i class="bi bi-person-circle profile-img"></i>
-                                    <div>
-                                        <h6 class="mb-1">นายสมชาย สุขสันต์</h6>
-                                        <small class="text-muted">HN: 12346 • อายุ: 42 ปี</small>
-                                    </div>
-                                    <span class="ms-auto badge bg-warning status-badge">รอพบแพทย์</span>
+                                <small class="text-muted">จ่าย 150 ครั้งในเดือนนี้</small>
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">Amoxicillin 500mg</h6>
+                                    <small class="text-muted">ยาปฏิชีวนะ</small>
                                 </div>
-
-                                <div class="patient-card p-3 d-flex align-items-center mb-2">
-                                    <i class="bi bi-person-circle profile-img"></i>
-                                    <div>
-                                        <h6 class="mb-1">เด็กหญิงน้ำใส ใจดี</h6>
-                                        <small class="text-muted">HN: 12347 • อายุ: 12 ปี</small>
-                                    </div>
-                                    <span class="ms-auto badge bg-info status-badge">นัดติดตามผล</span>
+                                <small class="text-muted">จ่าย 89 ครั้งในเดือนนี้</small>
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">Omeprazole 20mg</h6>
+                                    <small class="text-muted">ยาลดกรด</small>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title mb-3">ประวัติการจ่ายยาล่าสุด</h5>
-                            <div class="medicine-list">
-                                <div class="medicine-item d-flex align-items-center">
-                                    <div>
-                                        <h6 class="mb-1">นางสาวสมหญิง รักษ์สุขภาพ</h6>
-                                        <small class="text-muted">Paracetamol 500mg - 1 เม็ด ทุก 6 ชั่วโมง</small>
-                                    </div>
-                                    <small class="ms-auto text-muted">15 นาทีที่แล้ว</small>
-                                </div>
-
-                                <div class="medicine-item d-flex align-items-center">
-                                    <div>
-                                        <h6 class="mb-1">นายสมชาย สุขสันต์</h6>
-                                        <small class="text-muted">Amoxicillin 500mg - 1 เม็ด วันละ 3 ครั้ง</small>
-                                    </div>
-                                    <small class="ms-auto text-muted">1 ชั่วโมงที่แล้ว</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title mb-3">รายการยาที่ใช้บ่อย</h5>
-                            <div class="list-group">
-                                <a href="#" class="list-group-item list-group-item-action">
-                                    <div class="d-flex w-100 justify-content-between">
-                                        <h6 class="mb-1">Paracetamol 500mg</h6>
-                                        <small class="text-muted">ยาแก้ปวด</small>
-                                    </div>
-                                    <small class="text-muted">จ่าย 150 ครั้งในเดือนนี้</small>
-                                </a>
-                                <a href="#" class="list-group-item list-group-item-action">
-                                    <div class="d-flex w-100 justify-content-between">
-                                        <h6 class="mb-1">Amoxicillin 500mg</h6>
-                                        <small class="text-muted">ยาปฏิชีวนะ</small>
-                                    </div>
-                                    <small class="text-muted">จ่าย 89 ครั้งในเดือนนี้</small>
-                                </a>
-                                <a href="#" class="list-group-item list-group-item-action">
-                                    <div class="d-flex w-100 justify-content-between">
-                                        <h6 class="mb-1">Omeprazole 20mg</h6>
-                                        <small class="text-muted">ยาลดกรด</small>
-                                    </div>
-                                    <small class="text-muted">จ่าย 75 ครั้งในเดือนนี้</small>
-                                </a>
-                            </div>
+                                <small class="text-muted">จ่าย 75 ครั้งในเดือนนี้</small>
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Modal สั่งจ่ายยา -->
-    <!-- <div class="modal fade" id="prescribeModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">สั่งจ่ายยาใหม่</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label class="form-label">เลือกคนไข้</label>
-                            <select class="form-select">
-                                <option>นางสาวสมหญิง รักษ์สุขภาพ</option>
-                                <option>นายสมชาย สุขสันต์</option>
-                                <option>เด็กหญิงน้ำใส ใจดี</option>
-                            </select>
-                        </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">เลือกยา</label>
-                            <select class="form-select mb-2">
-                                <option>Paracetamol 500mg</option>
-                                <option>Amoxicillin 500mg</option>
-                                <option>Omeprazole 20mg</option>
-                            </select>
-                            <button type="button" class="btn btn-outline-primary btn-sm">
-                                <i class="fas fa-plus me-1"></i>เพิ่มยา
-                            </button>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">วิธีการใช้ยา</label>
-                            <textarea class="form-control" rows="3" placeholder="ระบุวิธีการใช้ยา เช่น รับประทานครั้งละ 1 เม็ด วันละ 3 ครั้ง หลังอาหาร"></textarea>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">ระยะเวลาการใช้ยา</label>
-                            <input type="number" class="form-control" placeholder="จำนวนวัน">
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">หมายเหตุเพิ่มเติม</label>
-                            <textarea class="form-control" rows="2"></textarea>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
-                    <button type="button" class="btn btn-primary">บันทึกการสั่งจ่ายยา</button>
-                </div>
-            </div>
-        </div>
-    </div> -->
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+{% endblock content %}

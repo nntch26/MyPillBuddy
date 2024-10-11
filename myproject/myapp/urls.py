@@ -13,5 +13,9 @@ urlpatterns = [
     path("profile/", ProfileView.as_view(), name="url_profile"),
     path("history/", HistoryView.as_view(), name="url_history"),
     path("medication/", MedicationView.as_view(), name="url_medication"),
+
+    # doctor
+    path("doctor/", DoctorView.as_view(), name="url_doctor"),
     path("addmedication/", AddMedicationView.as_view(), name="url_addmedication"),
+
 ]

@@ -62,3 +62,11 @@ class MedicationView(View):
 class AddMedicationView(View):
     def get(self, request):
         return render(request, 'add_medication.html')
+    
+
+class DoctorView(View):
+    def get(self, request):
+        return render(request, 'doctor.html')
+    
+
+
