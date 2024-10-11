@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ประวัติการทานยา</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2196f3;
+            --primary-dark: #1976d2;
+            --primary-light: #bbdefb;
+        }
+
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+        }
+
+        .nav-pills .nav-link.active {
+            background-color: var(--primary-color);
+        }
+
+        .nav-pills .nav-link {
+            color: var(--primary-color);
+        }
+
+        .history-card {
+            border-left: 4px solid;
+            margin-bottom: 15px;
+            transition: transform 0.2s;
+        }
+
+        .history-card:hover {
+            transform: translateX(5px);
+        }
+
+        .status-success {
+            border-left-color: #4CAF50;
+        }
+
+        .status-missed {
+            border-left-color: #f44336;
+        }
+
+        .status-pending {
+            border-left-color: #ff9800;
+        }
+
+        .calendar-day {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin: 2px;
+            font-size: 0.9rem;
+        }
+
+        .day-taken {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .day-missed {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .day-pending {
+            background-color: #ff9800;
+            color: white;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .stat-card i {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .back-button {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-right: 15px;
+        }
+
+        .med-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="container">
+            <div class="d-flex align-items-center">
+                <a href="home.html" class="back-button">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+                <h4 class="mb-0">ประวัติการทานยา</h4>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container py-4">
+        <!-- History List -->
+        <div class="card">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">รายการทานยา</h5>
+            </div>
+            <div class="card-body">
+                <!-- Today -->
+                <h6 class="text-muted mb-3">วันนี้</h6>
+                <div class="history-card status-success bg-white p-3 shadow-sm">
+                    <div class="row align-items-center">
+                        <div class="col-auto">
+                            <div class="med-icon bg-primary">
+                                <i class="fas fa-pills"></i>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <h6 class="mb-1">ยาความดัน</h6>
+                            <p class="mb-0 text-muted small">ทานแล้ว 08:00 น.</p>
+                        </div>
+                        <div class="col-auto">
+                            <span class="badge bg-success">ทานแล้ว</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="history-card status-pending bg-white p-3 shadow-sm">
+                    <div class="row align-items-center">
+                        <div class="col-auto">
+                            <div class="med-icon bg-warning">
+                                <i class="fas fa-pills"></i>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <h6 class="mb-1">วิตามิน</h6>
+                            <p class="mb-0 text-muted small">กำหนดทาน 12:00 น.</p>
+                        </div>
+                        <div class="col-auto">
+                            <span class="badge bg-warning">รอทานยา</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Yesterday -->
+                <h6 class="text-muted mb-3 mt-4">เมื่อวาน</h6>
+                <div class="history-card status-success bg-white p-3 shadow-sm">
+                    <div class="row align-items-center">
+                        <div class="col-auto">
+                            <div class="med-icon bg-primary">
+                                <i class="fas fa-pills"></i>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <h6 class="mb-1">ยาความดัน</h6>
+                            <p class="mb-0 text-muted small">ทานแล้ว 08:05 น.</p>
+                        </div>
+                        <div class="col-auto">
+                            <span class="badge bg-success">ทานแล้ว</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="history-card status-missed bg-white p-3 shadow-sm">
+                    <div class="row align-items-center">
+                        <div class="col-auto">
+                            <div class="med-icon bg-danger">
+                                <i class="fas fa-pills"></i>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <h6 class="mb-1">วิตามิน</h6>
+                            <p class="mb-0 text-muted small">ไม่ได้ทาน 12:00 น.</p>
+                        </div>
+                        <div class="col-auto">
+                            <span class="badge bg-danger">พลาดทานยา</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
