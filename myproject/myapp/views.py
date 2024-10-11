@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views import View
+from django.db.models import F, Q, Count, Value as V, Avg, Max, Min
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import logout, login, authenticate, update_session_auth_hash
 from .forms import CustomUserCreationForm
@@ -87,8 +88,20 @@ class DoctorView(View):
 
 class PatientListView(View):
     def get(self, request):
-        return render(request, 'temp_doctor/patient_list.html')
+        patient_list = User.objects.exclude(
+            Q(username__startswith='admin') | 
+            Q(username__startswith='doctor') ) 
+        # ไม่เอา admin staff doctor
 
+        return render(request, 'temp_doctor/patient_list.html', {'patient_list':patient_list})
+
+class PatientDelView(View):
+
+    def get(self, request, patient_id):
+        patient_data = User.objects.get(pk=patient_id)
+        patient_data.delete()
+        return redirect('url_patientlist')
+    
 
 class PatientAddView(View):
     def get(self, request):

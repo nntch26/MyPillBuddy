@@ -20,6 +20,7 @@ urlpatterns = [
 
     path("patient_list/", PatientListView.as_view(), name="url_patientlist"),
     path("patient_list/add/", PatientAddView.as_view(), name="url_addpatient"),
+    path("patient_list/del/<int:patient_id>", PatientDelView.as_view(), name="url_delpatient"),
 
 
 ]

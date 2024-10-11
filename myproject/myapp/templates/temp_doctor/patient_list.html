@@ -30,22 +30,10 @@
             </div>
         </div>
 
-        <!-- Search and Filter -->
-        <div class="row mb-4">
-            <div class="col-md-6">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="ค้นหาคนไข้ในการดูแล...">
-                    <button class="btn btn-outline-secondary" type="button">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </div>
-            </div>
-
-        </div>
 
         <!-- Patient Table -->
         <div class="table-responsive">
-            <table class="table table-hover">
+            <table id="dataTable" class="table table-hover" >
                 <thead class="table-light">
                     <tr>
                         <th>HN</th>
@@ -55,16 +43,16 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% for p in patient_list %}
                     <tr>
-                        <td>12345</td>
-                        <td>นางสาวสมหญิง รักษ์สุขภาพ</td>
-                        <td>081-234-5678</td>
+                        <td>{{ p.id }}</td>
+                        <td>{{ p.first_name }} {{ p.last_name }}</td>
+                        <td>{{ p.patient.phone_number }}</td>
                         <td>
-                            <button class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></button>
-                            <button class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+                            <a href="{% url 'url_delpatient' p.id %}" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></a>
                         </td>
                     </tr>
-                    <!-- ข้อมูลอื่นๆ เหมือนเดิม -->
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
