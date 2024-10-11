@@ -7,16 +7,17 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - .:/app/myapp
+      - .:/app  # Map the root project directory
+    working_dir: /app/myapp  # Ensure the container starts in the right directory
     depends_on:
-      - db
+      - localhost  # Changed from localhost to db
 
-  db:
+  localhost:  # Changed the service name to db
     image: postgres:13
     environment:
-      POSTGRES_DB: mydb # ชื่อ database
-      POSTGRES_USER: postgres 
-      POSTGRES_PASSWORD: 0000 # password database
+      POSTGRES_DB: mydb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 0000
     ports:
       - "5432:5432"
     expose:

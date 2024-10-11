@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Define variables
-        DOCKER_IMAGE = 'beztth/devtools_app'
+        DOCKER_IMAGE = 'beztth/devtools_app' // แก้ได้
         DOCKER_CREDENTIALS = credentials('dockerhub')
     }
 
