@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'your-dockerhub-username/django-app'
+        DOCKER_IMAGE = 'beztth/devtools-app'
         BRANCH = 'main'
     }
 
@@ -24,7 +24,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
                         docker.image("${DOCKER_IMAGE}:${env.BUILD_NUMBER}").push()
                     }
                 }
@@ -33,7 +33,7 @@ pipeline {
 
         stage('Deploy to Server') {
             steps {
-                sshagent (credentials: ['ssh-server-credentials']) {
+                sshagent (credentials: ['ssh-prod_instance']) {
                     sh """
                     ssh -o StrictHostKeyChecking=no user@your-server << EOF
                     docker pull ${DOCKER_IMAGE}:${env.BUILD_NUMBER}
