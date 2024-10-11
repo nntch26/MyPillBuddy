@@ -1,7 +1,7 @@
 <!-- extends ก่อน ค่อย load -->
 {% extends 'temp_doctor/base_doctor.html' %} 
 {% load static %}
-
+{% load crispy_forms_tags %}
 
 
 {% block title %}หน้าจัดการยา{% endblock title %}
@@ -135,7 +135,16 @@
                         </tr>
                     </thead>
                     <tbody id="medicationTableBody">
-                        <!-- Table content will be dynamically populated -->
+                        {% for i in medication %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ i }}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editMedicationModal"><i class="fas fa-edit"></i></button>
+                                    <a href="{% url 'url_deletemedication' i.id %}" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
@@ -150,16 +159,17 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="addMedicationForm">
+                        <form id="addMedicationForm" method="post" action="{% url 'url_showmedication' %}">
+                            {% csrf_token %}
                             <div class="mb-3">
-                                <label for="medicationName" class="form-label">ชื่อยา</label>
-                                <input type="text" class="form-control" id="medicationName" required>
+                                {{ form.name|as_crispy_field }}
+                                {{ form.drugtype|as_crispy_field }}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                                <button type="submit" class="btn btn-primary" onclick="addMedication()">บันทึก</button>
                             </div>
                         </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
-                        <button type="button" class="btn btn-primary" onclick="addMedication()">บันทึก</button>
                     </div>
                 </div>
             </div>
@@ -173,18 +183,18 @@
                         <h5 class="modal-title">แก้ไขยา</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
-                    <div class="modal-body">
-                        <form id="editMedicationForm">
-                            <input type="hidden" id="editMedicationId">
+                    <div class="modal-body">    
+                        <form id="editMedicationForm" method="post" action="{% url 'url_editmedication' %}">
+                            {% csrf_token %}
                             <div class="mb-3">
-                                <label for="editMedicationName" class="form-label">ชื่อยา</label>
-                                <input type="text" class="form-control" id="editMedicationName" required>
+                                {{ form.name|as_crispy_field }}
+                                {{ form.drugtype|as_crispy_field }}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                                <button type="button" class="btn btn-primary" onclick="updateMedication()">บันทึก</button>
                             </div>
                         </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
-                        <button type="button" class="btn btn-primary" onclick="updateMedication()">บันทึก</button>
                     </div>
                 </div>
             </div>

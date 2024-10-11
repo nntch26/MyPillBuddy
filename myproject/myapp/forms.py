@@ -24,12 +24,22 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'password1', 'password2', 
-                  'first_name', 'last_name', 'phone_number', 'birth_date', 
-                  'health_detail', 'address', 'gender', 
-                  'chronic_disease')
+                'first_name', 'last_name', 'phone_number', 'birth_date', 
+                'health_detail', 'address', 'gender', 
+                'chronic_disease')
 
         labels = {
             'username': 'ชื่อผู้ใช้',
             'password1': 'รหัสผ่าน',
             'password2': 'ยืนยันรหัสผ่าน',
+        }
+
+class AddMedicationForm(forms.ModelForm):
+    class Meta:
+        model = Medication
+        fields = ('name', 'drugtype')
+
+        labels = {
+            'name': 'ชื่อยา',
+            'drugtype': 'ประเภทของยา',
         }
