@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import logout, login, authenticate, update_session_auth_hash
+from .forms import CustomUserCreationForm
+from .models import *
 
 class indexView(View):
     def get(self, request):
@@ -9,21 +11,27 @@ class indexView(View):
 
 class RegisterView(View):
     def get(self, request):
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
         return render(request, 'register.html', {'form': form})
     def post(self, request):
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
+            # patient = form.save()
+            # Patient.objects.create(
+            #     user = patient,
+            #     phone_number = form.cleaned_data["phone_number"],
+            #     health_detail = form.cleaned_data["health_detail"]
+            # )
             return redirect('url_login')
         return render(request, 'register.html', {'form': form})
     
 class LoginView(View):
     def get(self, request):
         form = AuthenticationForm()
-        return render(request, 'login.html')
+        return render(request, 'login.html', {'form': form})
     def post(self, request):
-        form = AuthenticationForm(request.POST)
+        form = AuthenticationForm(data=request.POST)
         if form.is_valid():
             user = form.get_user() 
             login(request,user)
