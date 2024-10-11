@@ -14,8 +14,8 @@ services:
   db:
     image: postgres:13
     environment:
-      POSTGRES_DB: mydatabase # ชื่อ database
+      POSTGRES_DB: mydb # ชื่อ database
       POSTGRES_USER: postgres 
-      POSTGRES_PASSWORD: mypassword # password database
+      POSTGRES_PASSWORD: 0000 # password database
     ports:
       - "5432:5432"
