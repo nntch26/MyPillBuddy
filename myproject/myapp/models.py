@@ -34,7 +34,16 @@ class Patient(models.Model):
 
 
 class Medication(models.Model):
+
+    TYPE_CHOICES = [
+        ('tablet', 'ยาเม็ด'),
+        ('liquid', 'ยาน้ำ'),
+        ('topical', 'ยาทา'),
+        ('inhaler', 'ยาพ่น'),
+    ]
+
     name = models.CharField(max_length=255)
+    drugtype = models.CharField(max_length=100, choices=TYPE_CHOICES, default=None)
 
     def __str__(self):
         return self.name
