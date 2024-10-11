@@ -42,25 +42,27 @@ pipeline {
             }
         }
 
-        // stage('Clear Docker Components') {
-        //     steps {
-        //         script {
-        //             // Remove Docker images and containers
-        //             sh 'docker stop $(docker ps -a -q)'  
-        //             sh 'docker rm $(docker ps -a -q)' 
-        //             sh 'docker rmi --force $(docker images -q)'
-        //             sh 'docker system prune -af'
-        //         }
-        //     }
-        // }
+        stage('Clear Docker Components') {
+            steps {
+                script {
+                    // Remove Docker images and containers
+                    sh 'docker stop $(docker ps -a -q)'  
+                    sh 'docker rm $(docker ps -a -q)' 
+                    sh 'docker rmi --force $(docker images -q)'
+                    sh 'docker system prune -af'
+                }
+            }
+        }
 
         stage('Deploy') {
             steps {
                 script {
                     // Pull the Docker image from Docker Hub
                     sh 'docker pull $DOCKER_IMAGE'
-                    // Run the Docker container
-                    sh 'docker run -d --name devtools_app -p 8085:80 $DOCKER_IMAGE'
+                    // Run the Docker container in detached mode
+                    sh 'docker run -dit --name devtools_app -p 8085:80 $DOCKER_IMAGE python manage.py runserver'
+                    // Check the container's status
+                    sh 'docker ps -a | grep devtools_app'
                 }
             }
         }
