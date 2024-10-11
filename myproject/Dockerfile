@@ -10,9 +10,6 @@ COPY . /app
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Move to the myapp directory to run the Django development server
-WORKDIR /app/myapp
-
 # Expose port 8000 for Django
 EXPOSE 8000
 
