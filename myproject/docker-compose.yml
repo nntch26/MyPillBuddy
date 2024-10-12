@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   web:
+    image: django_app
     build: .
     container_name: django_app
     command: python manage.py runserver 0.0.0.0:8000
