@@ -61,12 +61,12 @@ pipeline {
                 }
             }
         }
+    }
 
-        post {
-            always {
-                // Logout from Docker Hub
-                sh 'docker logout'
-            }
+    post {
+        always {
+            // Logout from Docker Hub
+            sh 'docker logout'
         }
     }
 }
