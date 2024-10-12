@@ -49,23 +49,27 @@ class Medication(models.Model):
         return self.name
 
 class Prescription(models.Model):
+
+    TIME_CHOICES = [
+        ('ก่อนอาหาร', 'ก่อนอาหาร'),
+        ('หลังอาหาร', 'หลังอาหาร'),
+    ]
+
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     doctor = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True)
     medication = models.OneToOneField(Medication, on_delete=models.CASCADE)
-    dosage = models.CharField(max_length=50)  
-    frequency = models.CharField(max_length=100)  
-    description = models.TextField(blank=True)
-    start_date = models.DateField()
-    end_date = models.DateField()
+    frequency = models.CharField(max_length=155)  # ความถี่ในการกิน เช้า เย็น
+    duration  = models.CharField(max_length=100, choices=TIME_CHOICES, default=None)
     notes = models.TextField(blank=True)
 
     def __str__(self):
         return f"{self.medication.name} - {self.patient.full_name}"
 
+
 class MedicationReminder(models.Model):
     prescription = models.ForeignKey(Prescription, on_delete=models.CASCADE)
     reminder_time = models.DateTimeField()
-    taken = models.BooleanField(default=False)
+    taken = models.BooleanField(default=False) # กินยายัง
 
     def __str__(self):
         return f"Reminder for {self.prescription.medication.name} at {self.reminder_time}"
