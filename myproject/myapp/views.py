@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, Pass
 from django.contrib.auth import logout, login, authenticate, update_session_auth_hash
 from .forms import CustomUserCreationForm, AddMedicationForm
 from .models import *
+from django.contrib.auth.models import Group
 
 class indexView(View):
     def get(self, request):
@@ -32,6 +33,9 @@ class RegisterView(View):
                 health_detail = form.cleaned_data["health_detail"],
                 chronic_disease = form.cleaned_data["chronic_disease"]
             )
+            group = Group.objects.get(name='patient')
+            patient.groups.add(group)
+            
             login(request,patient)
             return redirect('home')
         

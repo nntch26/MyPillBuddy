@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ข้อมูลผู้ป่วย</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+{% extends 'base.html' %}
+{% block title %}
+    ข้อมูลผู้ป่วย
+{% endblock %}
+{% block styles %}
     <style>
         :root {
             --primary-color: #2196f3;
@@ -113,7 +110,8 @@
             margin-bottom: 1.5rem;
         }
     </style>
-</head>
+{% endblock %}
+{% block content %}
 <body class="bg-light">
     <div class="container-fluid p-0">
         <!-- Profile Header -->
@@ -206,24 +204,9 @@
                         </div>
                     </div>
                     <div class="col">
-                        <h5 class="mb-1">นพ. สมชาย ใจดี</h5>
-                        <p class="mb-1 text-muted">แผนกอายุรกรรม</p>
-                        <small class="hospital-name">โรงพยาบาลศิริราช</small>
-                    </div>
-                </div>
-            </div>
-
-            <div class="doctor-card bg-white p-3 shadow-sm">
-                <div class="row align-items-center">
-                    <div class="col-auto">
-                        <div class="rounded-circle doctor-icon text-white p-3">
-                            <i class="fas fa-user-md fa-2x"></i>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <h5 class="mb-1">พญ. สมหญิง รักษาดี</h5>
-                        <p class="mb-1 text-muted">แผนกกระดูกและข้อ</p>
-                        <small class="hospital-name">โรงพยาบาลจุฬาลงกรณ์</small>
+                        <h5 class="mb-1">{{ patient.doctor }}</h5>
+                        <p class="mb-1 text-muted">{{ patient.doctor.specialization }}</p>
+                        <small class="hospital-name">{{ patient.doctor.phone_number }}</small>
                     </div>
                 </div>
             </div>
@@ -232,4 +215,9 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
 </body>
-</html>
+
+{% endblock %}
+
+{% block navbar %}
+
+{% endblock %}
