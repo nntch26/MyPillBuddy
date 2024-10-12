@@ -38,8 +38,7 @@ class Medication(models.Model):
     TYPE_CHOICES = [
         ('tablet', 'ยาเม็ด'),
         ('liquid', 'ยาน้ำ'),
-        ('topical', 'ยาทา'),
-        ('inhaler', 'ยาพ่น'),
+
     ]
 
     name = models.CharField(max_length=255)
