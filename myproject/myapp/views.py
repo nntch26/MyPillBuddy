@@ -113,16 +113,17 @@ class DeleteMedicationView(View):
         return redirect('url_showmedication')
     
 class EditMedicationView(View):
-    def get(self, request, id):
+    def post(self, request, id):
         medication = Medication.objects.get(id=id)
-        form = AddMedicationForm(instance=medication)
+        form = AddMedicationForm(request.POST, instance=medication)
         if form.is_valid():
-            form.save()
-            print('save')
-            return  redirect('url_showmedication')
-        print('unsave')
-        context = {"form":form}
+            form.save()  
+            return redirect('url_showmedication')
+
+        context = {"form": form, "medication": medication,}
         return render(request, 'temp_doctor/show_medication.html', context)
+
+
 
 
 #//////////////////// หน้าหลัก ///////////////////

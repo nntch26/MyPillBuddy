@@ -1,8 +1,6 @@
-<!-- extends ก่อน ค่อย load -->
 {% extends 'temp_doctor/base_doctor.html' %} 
 {% load static %}
 {% load crispy_forms_tags %}
-
 
 {% block title %}หน้าจัดการยา{% endblock title %}
 
@@ -102,7 +100,6 @@
         }
         
     </style>
-    
 {% endblock styles %}
 </head>
 <body>
@@ -138,12 +135,43 @@
                         {% for i in medication %}
                             <tr>
                                 <td>{{ forloop.counter }}</td>
-                                <td>{{ i }}</td>
+                                <td>{{ i.name }}</td>
                                 <td>
-                                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editMedicationModal"><i class="fas fa-edit"></i></button>
-                                    <a href="{% url 'url_deletemedication' i.id %}" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></a>
+                                    <!-- Edit Medication Button -->
+                                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editMedicationModal{{ i.id }}">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <!-- Delete Medication Link -->
+                                    <a href="{% url 'url_deletemedication' i.id %}" class="btn btn-sm btn-outline-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
                                 </td>
                             </tr>
+
+                            <!-- Edit Medication Modal -->
+                            <div class="modal fade" id="editMedicationModal{{ i.id }}" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">แก้ไขยา</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">    
+                                            <form id="editMedicationForm" method="post" action="{% url 'url_editmedication' i.id %}">
+                                                {% csrf_token %}
+                                                <div class="mb-3">
+                                                    {{ form.name|as_crispy_field }}
+                                                    {{ form.drugtype|as_crispy_field }}
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                                                    <button type="submit" class="btn btn-primary">บันทึก</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         {% endfor %}
                     </tbody>
                 </table>
@@ -167,7 +195,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
-                                <button type="submit" class="btn btn-primary" onclick="addMedication()">บันทึก</button>
+                                <button type="submit" class="btn btn-primary">บันทึก</button>
                             </div>
                         </form>
                     </div>
@@ -175,29 +203,6 @@
             </div>
         </div>
 
-        <!-- Edit Medication Modal -->
-        <div class="modal fade" id="editMedicationModal" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">แก้ไขยา</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">    
-                        <form id="editMedicationForm" method="post" action="{% url 'url_editmedication' %}">
-                            {% csrf_token %}
-                            <div class="mb-3">
-                                {{ form.name|as_crispy_field }}
-                                {{ form.drugtype|as_crispy_field }}
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
-                                <button type="button" class="btn btn-primary" onclick="updateMedication()">บันทึก</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
     {% endblock content %}
+</body>
