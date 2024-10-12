@@ -38,15 +38,18 @@ pipeline {
             }
         }
 
-        // stage('Clear Docker Components') {
-        //     steps {
-        //         script {
-        //             // Stop and remove all containers, then prune the system
-        //             sh 'docker-compose down'
-        //             sh 'docker system prune -af'
-        //         }
-        //     }
-        // }
+        stage('Clear Docker Components') {
+            steps {
+                script {
+                    // Navigate to the project directory that contains docker-compose.yml
+                    dir('./myproject') {
+                        // Stop and remove all containers defined in the compose file
+                        sh 'docker-compose down'
+                        sh 'docker system prune -af'
+                    }
+                }
+            }
+        }
 
         stage('Deploy with Docker Compose') {
             steps {
