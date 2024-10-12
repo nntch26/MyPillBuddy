@@ -60,6 +60,9 @@ class Prescription(models.Model):
     frequency = models.CharField(max_length=155)  # ความถี่ในการกิน เช้า เย็น
     duration  = models.CharField(max_length=100, choices=TIME_CHOICES, default=None)
     notes = models.TextField(blank=True)
+    start_date = models.DateField(default=None)
+    end_date = models.DateField(null=True, blank=True,default=None)
+
 
     def __str__(self):
         return f"{self.medication.name} - {self.patient.full_name}"

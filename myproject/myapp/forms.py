@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import *
 from .models import *
+from datetime import date
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -41,5 +42,39 @@ class AddMedicationForm(forms.ModelForm):
 
         labels = {
             'name': 'ชื่อยา',
-            'drugtype': 'ประเภทของยา',
+            'drugtype': 'ประเภทของยา'
         }
+
+
+class PrescriptionForm(forms.ModelForm):
+    
+    medication = forms.ModelChoiceField(queryset=Medication.objects.all(),
+                                     label='เลือกยา') 
+
+    class Meta:
+        model = Prescription
+        fields = (
+            'medication',
+            'frequency',
+            'duration',
+            'notes',
+            'start_date',
+            'end_date'
+            )
+
+        labels = {
+            'frequency': 'ความถี่',
+            'duration': 'ช่วงเวลา',
+            'notes': 'หมายเหตุ',
+            'start_date':'วันเริ่มกินยา',
+            'end_date':'วันครบกำหนด'
+        }
+
+        widgets = {
+            "start_date": forms.DateInput(attrs={'type': 'date'}),
+            "end_date": forms.DateInput(attrs={'type': 'date'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['start_date'].initial = date.today()

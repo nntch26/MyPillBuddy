@@ -277,24 +277,29 @@
             </div>
 
             <div class="mb-4">
-                <div class="form-floating">
-                    {{ form.notes|as_crispy_field }}
+                <label class="form-label">เวลากินยา</label>
+                <div class="med-time-input">
+                    <input type="time" value="12:00" required>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-6 mb-4">
-                    <div class="form-floating">
-                        {{ form.start_date|as_crispy_field }}
-                    </div>
-                </div>
-                <div class="col-6 mb-4">
-                    <div class="form-floating">
-                        {{ form.end_date|as_crispy_field }}
-                    </div>
+            <div class="mb-4">
+                <label class="form-label">จำนวน</label>
+                <select class="form-select">
+                    <option>1 เม็ด</option>
+                    <option>2 เม็ด</option>
+                    <option>3 เม็ด</option>
+                    <option>4 เม็ด</option>
+                    <option>5 เม็ด</option>
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <div class="form-floating">
+                    <textarea class="form-control" placeholder="เพิ่มหมายเหตุ (ถ้ามี)" id="notes" style="height: 100px"></textarea>
+                    <label for="notes">หมายเหตุ</label>
                 </div>
             </div>
-           
 
             <div class="submit-container">
                 <button type="submit" class="submit-button">บันทึกการสั่งจ่ายยา</button>
@@ -302,4 +307,30 @@
         </form>
     </div>
 
+
+    <!-- Modal สั่งจ่ายยา -->
+    <div class="modal fade" id="prescribeModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">เพิ่มยา</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-4">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="medName" placeholder="กรอกชื่อยา" required>
+                                <label for="medName">ชื่อยา</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                    <button type="button" class="btn btn-primary">บันทึกยา</button>
+                </div>
+            </div>
+        </div>
+    </div>
     {% endblock content%}
