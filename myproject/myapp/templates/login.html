@@ -1,3 +1,5 @@
+{% load crispy_forms_tags %}
+
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -54,12 +56,10 @@
                     <form method="POST">
                         {% csrf_token %}
                         <div class="mb-3">
-                            <label for="loginEmail" class="form-label">Username</label>
-                            {{ form.username }}
+                            {{ form.username|as_crispy_field }}
                         </div>
                         <div class="mb-3">
-                            <label for="loginPassword" class="form-label">รหัสผ่าน</label>
-                            {{ form.password }}
+                            {{ form.password|as_crispy_field }}
                         </div>
                         <div style="display: flex; justify-content: center;">
                             <button type="submit" class="btn btn-primary" style="text-align: center; margin-bottom: 10px; margin-top: 10px; width: 100%;">เข้าสู่ระบบ</button>
