@@ -51,14 +51,16 @@ pipeline {
         stage('Deploy with Docker Compose') {
             steps {
                 script {
-                    // Pull the latest image from Docker Hub
-                    sh 'docker pull $DOCKER_IMAGE'
-                    // Bring up the services with Docker Compose
-                    sh 'docker compose up'
+                    // Navigate to the project directory that contains docker-compose.yml
+                    dir('./myproject') {
+                        // Pull the latest image from Docker Hub
+                        sh 'docker pull $DOCKER_IMAGE'
+                        // Bring up the services with Docker Compose
+                        sh 'docker compose up'
+                    }
                 }
             }
         }
-    }
 
     post {
         always {
