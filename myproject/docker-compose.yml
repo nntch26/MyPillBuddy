@@ -12,9 +12,9 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - db
+      - localhost
 
-  db:
+  localhost:
     image: postgres:13
     container_name: postgres_db
     environment:
