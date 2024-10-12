@@ -156,12 +156,15 @@ class PrescriptionView(View):
         doctor1 = get_object_or_404(Doctor, user=request.user)# หมอที่ล็อกอินอยู่
         patient1 = get_object_or_404(Patient, id=patient_id) # หา id คนไข้
 
-        form = AddMedicationForm(request.POST)
+        form = PrescriptionForm(request.POST)
+        print(form)
+        print(form.errors)
+        
         if form.is_valid():
             form.instance.patient = patient1
             form.instance.doctor = doctor1
             form.save()  
-            return redirect('url_showmedication')
+            return redirect('url_patientlist')
 
 
         patient_select = User.objects.get(pk=patient_id)
