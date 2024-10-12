@@ -54,7 +54,7 @@ pipeline {
                     // Pull the latest image from Docker Hub
                     sh 'docker pull $DOCKER_IMAGE'
                     // Bring up the services with Docker Compose
-                    sh 'docker-compose up'
+                    sh 'docker compose up'
                 }
             }
         }
