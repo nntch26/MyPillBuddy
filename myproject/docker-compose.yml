@@ -5,16 +5,16 @@ services:
     image: django_app
     build: .
     container_name: django_app
-    command: python manage.py runserver 0.0.0.0:8000
+    command: ["./wait-for-it.sh", "db:5432", "--", "python", "manage.py", "runserver", "0.0.0.0:8000"]
     volumes:
       - .:/app
       - static_volume:/app/static
     ports:
       - "8000:8000"
     depends_on:
-      - localhost
+      - db
 
-  localhost:
+  db:
     image: postgres:13
     container_name: postgres_db
     environment:
