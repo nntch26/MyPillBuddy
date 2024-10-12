@@ -3,7 +3,7 @@ from django.views import View
 from django.db.models import F, Q, Count, Value as V, Avg, Max, Min
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import logout, login, authenticate, update_session_auth_hash
-from .forms import CustomUserCreationForm, AddMedicationForm
+from .forms import CustomUserCreationForm, AddMedicationForm, PrescriptionForm
 from .models import *
 from django.contrib.auth.models import Group
 
@@ -135,9 +135,44 @@ class DoctorView(View):
 
 #//////////////////// สั่งยา ///////////////////
 
+
 class PrescriptionView(View):
-    def get(self, request):
-        return render(request, 'temp_doctor/prescription.html')
+
+    def get(self, request, patient_id):
+        
+        patient_select = User.objects.get(pk=patient_id)
+
+        form = PrescriptionForm()
+        context = {
+            'form':form, 
+            'patient_select':patient_select
+        }
+        
+        return render(request, 'temp_doctor/prescription.html', context)
+
+
+    def post(self, request, patient_id):
+        
+        doctor1 = get_object_or_404(Doctor, user=request.user)# หมอที่ล็อกอินอยู่
+        patient1 = get_object_or_404(Patient, id=patient_id) # หา id คนไข้
+
+        form = AddMedicationForm(request.POST)
+        if form.is_valid():
+            form.instance.patient = patient1
+            form.instance.doctor = doctor1
+            form.save()  
+            return redirect('url_showmedication')
+
+
+        patient_select = User.objects.get(pk=patient_id)
+        form = PrescriptionForm()
+
+        context = {
+            'form':form, 
+            'patient_select':patient_select
+        }
+        return render(request, 'temp_doctor/prescription.html', context)
+    
 
 
 #//////////////////// รายชื่อคนไข้ ///////////////////
@@ -183,8 +218,13 @@ class PatientAddView(View):
     def get(self, request, patient_id):
         
         doctor = get_object_or_404(Doctor, user=request.user)# หมอที่ล็อกอินอยู่
-        patient = get_object_or_404(Patient, id=patient_id) # หา id คนไข้
+        patient_list = Patient.objects.filter(doctor=doctor)
+        form = PrescriptionForm()
 
         # เพิ่มคนไข้ให้กับหมอ
         doctor.patients.add(patient)
         return redirect('url_patientlist')
+
+
+
+

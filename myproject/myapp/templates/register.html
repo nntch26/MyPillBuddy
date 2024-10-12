@@ -1,12 +1,12 @@
+<!-- extends ก่อน ค่อย load -->
+{% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
-<!DOCTYPE html>
-<html lang="th">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบสมาชิก</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+
+
+{% block title %}สมัครสมาชิก{% endblock title %}
+
+{% block styles %}
     <style>
         body {
             background-color: #2196f3;
@@ -44,8 +44,13 @@
             justify-content: space-between;
         }
     </style>
-</head>
-<body>
+{% block styles %}
+
+{% block navbar %}
+
+{% endblock navbar %}
+
+{% block content %}
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-12 col-md-6">
@@ -142,5 +147,4 @@
             </div>
         </div>
     </div>
-</body>
-</html>
+{% endblock content %}
