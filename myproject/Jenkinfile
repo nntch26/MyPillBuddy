@@ -2,40 +2,36 @@ pipeline {
     agent any
 
     environment {
-        // Define variables
-        DOCKER_IMAGE = 'beztth/devtools_app' // แก้ได้
+        DOCKER_IMAGE = 'beztth/devtools_app'
         DOCKER_CREDENTIALS = credentials('dockerhub')
     }
 
     stages {
         stage('Start Jenkins') {
             steps {
-                // Checkout your source code from version control
-             
-                    sh 'echo Start Jenkins............'
-                    sh 'echo docker : user = $DOCKER_CREDENTIALS_USR : password = $DOCKER_CREDENTIALS_PSW'
+                sh 'echo Start Jenkins............'
+                sh 'echo docker : user = $DOCKER_CREDENTIALS_USR : password = $DOCKER_CREDENTIALS_PSW'
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Build Docker Image with Compose') {
             steps {
-                    // Build the Docker image
-                    
-                    dir('./myproject') {
-                       sh 'echo "Running in $(pwd)"'
-                       sh 'echo start build the Docker image = $DOCKER_IMAGE'
-                       sh 'docker build -t $DOCKER_IMAGE .'
-                    }   
-                  
+                dir('./myproject') {
+                    sh 'echo "Running in $(pwd)"'
+                    sh 'echo start build the Docker image with Compose = $DOCKER_IMAGE'
+                    // Build the image using docker-compose
+                    sh 'docker-compose build'
+                }
             }
         }
 
         stage('Push to Docker Hub') {
             steps {
                 script {
-                    
                     // Login to Docker Hub
                     sh 'echo $DOCKER_CREDENTIALS_PSW | docker login --username $DOCKER_CREDENTIALS_USR --password-stdin'
+                    // Tag the built image with the correct name
+                    sh 'docker tag django_app $DOCKER_IMAGE'
                     // Push the image
                     sh 'docker push $DOCKER_IMAGE'
                 }
@@ -45,22 +41,20 @@ pipeline {
         stage('Clear Docker Components') {
             steps {
                 script {
-                    // Remove Docker images and containers
-                    sh 'docker stop $(docker ps -a -q)'  
-                    sh 'docker rm $(docker ps -a -q)' 
-                    sh 'docker rmi --force $(docker images -q)'
+                    // Stop and remove all containers, then prune the system
+                    sh 'docker-compose down'
                     sh 'docker system prune -af'
                 }
             }
         }
 
-        stage('Deploy') {
+        stage('Deploy with Docker Compose') {
             steps {
                 script {
-                    // Pull the Docker image from Docker Hub
+                    // Pull the latest image from Docker Hub
                     sh 'docker pull $DOCKER_IMAGE'
-                    // Run the Docker container in detached mode
-                    sh 'docker run -d --name devtools_app -p 8085:80'
+                    // Bring up the services with Docker Compose
+                    sh 'docker-compose up -d'
                 }
             }
         }
