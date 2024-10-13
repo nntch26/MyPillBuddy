@@ -78,3 +78,18 @@ class PrescriptionForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['start_date'].initial = date.today()
+
+
+class MedicationReminderForm(forms.ModelForm):
+    class Meta:
+        model = MedicationReminder
+        fields = ['prescription', 'reminder_time']
+
+        labels = {
+            'prescription': 'ใบสั่งยา',
+            'reminder_time': 'เวลาที่ต้องกินยา',
+        }
+
+        widgets = {
+            "reminder_time": forms.DateInput(attrs={'type': 'time'}),
+        }
