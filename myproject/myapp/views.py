@@ -229,5 +229,9 @@ class PatientAddView(View):
         return redirect('url_patientlist')
 
 
+class ReminderView(View):
+    def get(self, request):
+        return render(request,  'temp_doctor/reminder.html')
+    
 
 

@@ -67,22 +67,24 @@
 
     <div class="container min-vh-100 d-flex flex-column py-3">
         <main class="flex-grow-1 d-flex flex-column align-items-center">
-            <div class="w-100" style="max-width: 300px; ">
-                <div class="divcus d-flex align-items-center mb-3 rounded p-2">
-                    <span class="flex-grow-1">8:00 AM</span>
-                    <button class="btn btn-danger btn-sm rounded-circle ms-2">×</button>
-                </div>
-                <div class="divcus d-flex align-items-center mb-3 rounded p-2">
-                    <span class="flex-grow-1">1:00 PM</span>
-                    <button class="btn btn-danger btn-sm rounded-circle ms-2">×</button>
-                </div>
-                <div class="divcus d-flex align-items-center mb-3 rounded p-2">
-                    <span class="flex-grow-1">7:00 PM</span>
-                    <button class="btn btn-danger btn-sm rounded-circle ms-2">×</button>
+            <div class="w-100" style="max-width: 300px;">
+                <!-- ที่นี่เป็นส่วนของการแสดงเวลาที่เลือก -->
+                <div id="reminder-container">
+                    
                 </div>
 
-                <button class="btn btn-light text-primary w-100 mb-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus me-2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                <!-- ช่อง input สำหรับเลือกเวลา -->
+                <div class="mb-3">
+                    <label for="new-time-picker" class="form-label">เลือกเวลา</label>
+                    <input id="new-time-picker" type="time" class="form-control">
+                </div>
+
+                <!-- ปุ่มสำหรับเพิ่มเวลา -->
+                <button id="add-time-button" class="btn btn-light text-primary w-100 mb-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus me-2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
                     เพิ่มเวลา
                 </button>
 
@@ -91,9 +93,99 @@
                 </button>
             </div>
         </main>
-
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        const reminderContainer = document.getElementById('reminder-container');
+        const addTimeButton = document.getElementById('add-time-button');
+        const timePicker = document.getElementById('new-time-picker');
+
+        // ฟังก์ชันสำหรับลบเวลา
+        function removeTimeEventListener() {
+            document.querySelectorAll('.remove-time').forEach(function(button) {
+                button.addEventListener('click', function() {
+                    const timeToRemove = this.closest('.divcus').querySelector('span').textContent;
+                    removeTimeFromLocalStorage(timeToRemove);
+                    this.closest('.divcus').remove(); // ลบเวลานั้นออก
+                });
+            });
+        }
+
+        // ฟังก์ชันเพิ่มเวลาใน Local Storage
+        function addTimeToLocalStorage(time) {
+            let times = JSON.parse(localStorage.getItem('reminderTimes')) || [];
+            times.push(time);
+            localStorage.setItem('reminderTimes', JSON.stringify(times));
+        }
+
+        // ฟังก์ชันลบเวลาออกจาก Local Storage
+        function removeTimeFromLocalStorage(time) {
+            let times = JSON.parse(localStorage.getItem('reminderTimes')) || [];
+            times = times.filter(storedTime => storedTime !== time);
+            localStorage.setItem('reminderTimes', JSON.stringify(times));
+        }
+
+        // ฟังก์ชันสำหรับเพิ่มเวลา
+        addTimeButton.addEventListener('click', function() {
+            const selectedTime = timePicker.value; // ดึงเวลาที่ผู้ใช้เลือก (24-hour format)
+            if (selectedTime) {
+                // แปลงจาก 24-hour format เป็น 12-hour format เช่น 14:00 เป็น 2:00 PM
+                const [hours, minutes] = selectedTime.split(':');
+                let formattedHours = hours % 12 || 12; // แปลงเป็น 12 ชั่วโมง
+                let period = hours >= 12 ? 'PM' : 'AM'; // ตรวจสอบว่าเป็น AM หรือ PM
+
+                const formattedTime = `${formattedHours}:${minutes} ${period}`;
+                
+                const newTimeElement = document.createElement('div');
+                newTimeElement.className = 'divcus d-flex align-items-center mb-3 rounded p-2';
+                newTimeElement.innerHTML = `
+                    <span class="flex-grow-1">${formattedTime}</span>
+                    <button class="btn btn-danger btn-sm rounded-circle ms-2 remove-time">×</button>
+                `;
+
+                // เพิ่มช่องเวลาใหม่
+                reminderContainer.appendChild(newTimeElement);
+
+                // บันทึกเวลาใน Local Storage
+                addTimeToLocalStorage(formattedTime);
+
+                // รีเซ็ต input field
+                timePicker.value = '';
+
+                // เพิ่ม event listener สำหรับปุ่มลบเวลาใหม่
+                removeTimeEventListener();
+            } else {
+                alert("กรุณาเลือกเวลาก่อนเพิ่ม!");
+            }
+        });
+
+        // ฟังก์ชันสำหรับโหลดเวลาจาก Local Storage
+        function loadTimesFromLocalStorage() {
+            const times = JSON.parse(localStorage.getItem('reminderTimes')) || [];
+            times.forEach(time => {
+                const newTimeElement = document.createElement('div');
+                newTimeElement.className = 'divcus d-flex align-items-center mb-3 rounded p-2';
+                newTimeElement.innerHTML = `
+                    <span class="flex-grow-1">${time}</span>
+                    <button class="btn btn-danger btn-sm rounded-circle ms-2 remove-time">×</button>
+                `;
+                reminderContainer.appendChild(newTimeElement);
+            });
+
+            // เพิ่ม event listener สำหรับปุ่มลบเวลาใหม่
+            removeTimeEventListener();
+        }
+
+        // เรียกฟังก์ชันสำหรับโหลดเวลาที่เก็บไว้ใน Local Storage
+            loadTimesFromLocalStorage();
+        });
+
+    </script>
+
 </body>
+
+
 </html>

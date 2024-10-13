@@ -40,6 +40,7 @@
                         <th>ชื่อ-นามสกุล</th>
                         <th>เบอร์โทรศัพท์</th>
                         <th>การจัดการ</th>
+                        <th>ตั้งเวลาแจ้งเตือน</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -52,7 +53,9 @@
                         <td>
                             <a href="{% url 'url_prescription' p.id %}" class="btn btn-sm btn btn-info me-2"><i class="fas fa-plus me-2"></i>สั่งจ่ายยา</a>
                             <a href="{% url 'url_delpatient' p.id %}" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></a>
-
+                        </td>
+                        <td>
+                            <a href="{% url 'url_reminder' %}">เพิ่ม</a>
                         </td>
                     </tr>
                     {% endfor %}
