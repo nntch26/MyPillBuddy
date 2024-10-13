@@ -324,6 +324,7 @@ class PatientListView(View):
             # ไม่เอา admin staff doctor
 
         doctor = get_object_or_404(Doctor, user=request.user) # หมอที่ล็อกอินอยู่
+        patient_list = User.objects.filter(patient__doctor=doctor) # แสดงเฉพาะคนไข้ของหมอที่ล๊อคอินอยู่
         print(patient_list)
 
         context = {
