@@ -23,7 +23,7 @@ class HomeView(View):
     def get(self, request):
         current_date = datetime.now()
         take = request.GET.get('click', None)
-        current_time_plus_five = (datetime.now() + timedelta(minutes=5)).time()
+        # current_time_plus_five = (datetime.now() + timedelta(minutes=5)).time()
 
         if take:
             medi = MedicationReminder.objects.get(id=take)
@@ -38,14 +38,21 @@ class HomeView(View):
             taken = False,
             reminder_time__lt=current_date.time()
         ).order_by('reminder_time')
+
          # ดึงรายการยาที่ต้องกินตามเวลาปัจจุบัน เรียงตามเวลาที่ต้องกิน
         reminder_list = MedicationReminder.objects.filter(
             prescription__patient__id= patients.id,
-            reminder_time__gte=current_time_plus_five  
-        ).order_by('reminder_time', 'taken')  
+            reminder_time__gte=current_date.time()  
+        ).order_by('reminder_time')  
+
+        # reminder_eaten = MedicationReminder.objects.filter(
+        #     prescription__patient__id= patients.id,
+        #     taken= True
+        # ).order_by('reminder_time')  
 
         print(reminder_list)
         print(remimder_late)
+        # print(reminder_eaten)
 
 
         context = {
