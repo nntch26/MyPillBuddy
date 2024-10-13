@@ -17,8 +17,7 @@ urlpatterns = [
     path("doctor/", DoctorView.as_view(), name="url_doctor"),
     path("Prescription/<int:patient_id>/", PrescriptionView.as_view(), name="url_prescription"),
     path("Prescription/<int:patient_id>/add/", PrescriptionView.as_view(), name="url_addprescription"),
-    # เพิ่มเวลาแจ้งเตือนกินยา
-    path("MedicationReminder/<int:id>/add/", AddReminderView.as_view(), name="url_addMedReminder"),
+    path("Reminder/<int:id>/", ReminderView.as_view(), name="url_reminder"),
 
 
     path("ShowMedication/", ShowMedicationView.as_view(), name="url_showmedication"),
