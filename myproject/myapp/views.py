@@ -8,6 +8,13 @@ from .models import *
 from django.contrib.auth.models import Group
 
 from datetime import datetime
+from django.http import HttpResponse
+from gtts import gTTS
+import os
+from datetime import datetime
+import time
+from django.conf import settings
+
 
 class indexView(View):
     def get(self, request):
@@ -361,3 +368,41 @@ class PatientAddView(View):
         # เพิ่มคนไข้ให้กับหมอ
         doctor.patients.add(patient)
         return redirect('url_patientlist')
+
+
+
+class AlertNotificationView(View):
+    def get(self, request, *args, **kwargs):
+        target_time = "18:28:10"  # กำหนดเวลา (ไม่รวมวันที่)
+        
+        audio_folder = os.path.join(settings.BASE_DIR, 'myapp', 'static', 'audio')
+        
+        # สร้างโฟลเดอร์ถ้ายังไม่มี
+        if not os.path.exists(audio_folder):
+            os.makedirs(audio_folder)
+        
+        # วนลูปเช็คเวลาทุกๆ 1 วินาที
+        while True:
+            current_time = datetime.now().strftime("%H:%M:%S")  # เอาแค่เวลา
+            
+            if current_time == target_time:
+                # สร้างข้อความแจ้งเตือน
+                alert_message = "ได้เวลาทานยาแล้ว"
+                
+                # สร้างเสียงแจ้งเตือน
+                tts = gTTS(text=alert_message, lang='th')
+                audio_file_path = os.path.join(audio_folder, "reminder.mp3")
+                tts.save(audio_file_path)  # บันทึกไฟล์เสียงในโฟลเดอร์ที่กำหนด
+
+                # ส่ง URL ของไฟล์เสียงไปยังหน้าเว็บ
+                audio_url = '/static/audio/reminder.mp3'
+                return render(request, 'alert_notification.html', {'audio_url': audio_url})
+
+            # เช็คว่าเวลาผ่านไปแล้วหรือยัง
+            if datetime.now().strftime("%H:%M:%S") > target_time:
+                # ส่งข้อความว่า "เลยเวลาทานยาแล้ว"
+                return HttpResponse("เลยเวลาทานยาแล้ว")
+            
+            # หน่วงเวลา 1 วินาที
+            time.sleep(1)
+
