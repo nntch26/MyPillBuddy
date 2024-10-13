@@ -173,10 +173,10 @@ class DoctorView(View):
         doctor = get_object_or_404(Doctor, user=request.user) # หมอที่ล็อกอินอยู่
         patient_list = User.objects.filter(patient__doctor=doctor) # แสดงเฉพาะคนไข้ของหมอที่ล๊อคอินอยู่
 
-        prescription_list = Prescription.objects.filter(doctor=doctor).order_by("-id")
+        prescription_list = Prescription.objects.filter(doctor=doctor).order_by("-id")[0:4]
         print(prescription_list)
 
-        medication_list = Medication.objects.all()
+        medication_list = Medication.objects.all().order_by("-id")[0:6]
 
 
         context = {
