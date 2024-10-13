@@ -3,7 +3,7 @@ from django.views import View
 from django.db.models import F, Q, Count, Value as V, Avg, Max, Min
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import logout, login, authenticate, update_session_auth_hash
-from .forms import CustomUserCreationForm, AddMedicationForm, PrescriptionForm
+from .forms import CustomUserCreationForm, AddMedicationForm, PrescriptionForm,MedicationReminderForm
 from .models import *
 from django.contrib.auth.models import Group
 
@@ -122,8 +122,10 @@ class EditMedicationView(View):
             form.save()  
             return redirect('url_showmedication')
 
-        context = {"form": form, "medication": medication,}
+        # ส่งข้อมูล form และข้อมูลยาไปยัง template (แต่ในกรณีนี้ส่วนใหญ่ไม่จำเป็น)
+        context = {"form": form, "medication": medication}
         return render(request, 'temp_doctor/show_medication.html', context)
+
 
 
 
@@ -165,8 +167,10 @@ class PrescriptionView(View):
         if form.is_valid():
             form.instance.patient = patient1
             form.instance.doctor = doctor1
-            form.save()  
-            return redirect('url_patientlist')
+            prescription = form.save()  # บันทึกใบสั่งยาและคืนค่าวัตถุที่ถูกบันทึก
+
+            # ส่งใบสั่งยาเมื้อกี้ที่สร้าง ไปหน้าตั้งเวลา
+            return redirect('url_addMedReminder', id= prescription.id)
 
 
         patient_select = User.objects.get(pk=patient_id)
@@ -178,6 +182,26 @@ class PrescriptionView(View):
         }
         return render(request, 'temp_doctor/prescription.html', context)
     
+
+class AddReminderView(View):
+
+    def get(self, request, id):
+
+        reminder_list = MedicationReminder.objects.filter(prescription__id=id)
+
+        form = MedicationReminderForm()
+        context = {
+            'form':form, 
+            'reminder_list':reminder_list
+        }
+            
+        return render(request, 'temp_doctor/reminder.html', context)
+
+
+
+
+
+
 
 
 #//////////////////// รายชื่อคนไข้ ///////////////////

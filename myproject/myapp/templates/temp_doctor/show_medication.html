@@ -128,6 +128,7 @@
                         <tr>
                             <th>ลำดับ</th>
                             <th>ชื่อยา</th>
+                            <th>ชนิดของยา</th>
                             <th>การจัดการ</th>
                         </tr>
                     </thead>
@@ -136,6 +137,7 @@
                             <tr>
                                 <td>{{ forloop.counter }}</td>
                                 <td>{{ i.name }}</td>
+                                <td>{{ i.drugtype }}</td>
                                 <td>
                                     <!-- Edit Medication Button -->
                                     <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editMedicationModal{{ i.id }}">
@@ -160,8 +162,20 @@
                                             <form id="editMedicationForm" method="post" action="{% url 'url_editmedication' i.id %}">
                                                 {% csrf_token %}
                                                 <div class="mb-3">
-                                                    {{ form.name|as_crispy_field }}
-                                                    {{ form.drugtype|as_crispy_field }}
+                                                    <label for="id_name_{{ i.id }}">ชื่อยา</label>
+                                                    <!-- ฟิลด์ชื่อยา -->
+                                                    <input type="text" class="form-control" id="id_name_{{ i.id }}" name="name" value="{{ i.name }}">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="id_drugtype_{{ i.id }}">ประเภทของยา</label>
+                                                    <!-- ฟิลด์ชนิดของยาเป็น dropdown -->
+                                                    <select class="form-select" id="id_drugtype_{{ i.id }}" name="drugtype">
+                                                        {% for choice in form.fields.drugtype.choices %}
+                                                            <option value="{{ choice.0 }}" {% if i.drugtype == choice.1 %}selected{% endif %}>
+                                                                {{ choice.1 }}
+                                                            </option>
+                                                        {% endfor %}
+                                                    </select>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
@@ -172,6 +186,8 @@
                                     </div>
                                 </div>
                             </div>
+
+
                         {% endfor %}
                     </tbody>
                 </table>
