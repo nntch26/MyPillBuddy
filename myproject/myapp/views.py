@@ -10,7 +10,7 @@ from django.contrib.auth.models import Group
 
 from gtts import gTTS
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 import time
 from django.conf import settings
 import pygame
@@ -29,6 +29,7 @@ class HomeView(View):
     def get(self, request):
         current_date = datetime.now()
         take = request.GET.get('click', None)
+        # current_time_plus_five = (datetime.now() + timedelta(minutes=5)).time()
 
         if take:
             medi = MedicationReminder.objects.get(id=take)
@@ -38,18 +39,32 @@ class HomeView(View):
         patients = request.user
         print(patients)  
 
+        remimder_late = MedicationReminder.objects.filter(
+            prescription__patient__id= patients.id,
+            taken = False,
+            reminder_time__lt=current_date.time()
+        ).order_by('reminder_time')
+
          # ดึงรายการยาที่ต้องกินตามเวลาปัจจุบัน เรียงตามเวลาที่ต้องกิน
         reminder_list = MedicationReminder.objects.filter(
-            prescription__patient__id= patients.id,  
-            reminder_time__gte=current_date.time()  # เวลาที่ต้องกินต้องมากกว่าหรือเท่ากับเวลาปัจจุบัน
+            prescription__patient__id= patients.id,
+            reminder_time__gte=current_date.time()  
         ).order_by('reminder_time')  
 
-        print(reminder_list)  
+        # reminder_eaten = MedicationReminder.objects.filter(
+        #     prescription__patient__id= patients.id,
+        #     taken= True
+        # ).order_by('reminder_time')  
+
+        print(reminder_list)
+        print(remimder_late)
+        # print(reminder_eaten)
 
 
         context = {
             'current_date':current_date,
-            'reminder_list':reminder_list
+            'reminder_list':reminder_list,
+            'remimder_late':remimder_late
         }
         return render(request, 'home.html', context)
 
@@ -173,10 +188,10 @@ class DoctorView(View):
         doctor = get_object_or_404(Doctor, user=request.user) # หมอที่ล็อกอินอยู่
         patient_list = User.objects.filter(patient__doctor=doctor) # แสดงเฉพาะคนไข้ของหมอที่ล๊อคอินอยู่
 
-        prescription_list = Prescription.objects.filter(doctor=doctor).order_by("-id")
+        prescription_list = Prescription.objects.filter(doctor=doctor).order_by("-id")[0:4]
         print(prescription_list)
 
-        medication_list = Medication.objects.all()
+        medication_list = Medication.objects.all().order_by("-id")[0:6]
 
 
         context = {
