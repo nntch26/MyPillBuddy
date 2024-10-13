@@ -11,3 +11,4 @@ pip install django-crispy-forms
 
 pip install gTTS
 
+pip install pygame
