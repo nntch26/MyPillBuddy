@@ -33,12 +33,14 @@ class HomeView(View):
         print(patients)  
 
         remimder_late = MedicationReminder.objects.filter(
+            prescription__patient__id= patients.id,
             taken = False,
             reminder_time__lt=current_date.time()
         ).order_by('reminder_time')
          # ดึงรายการยาที่ต้องกินตามเวลาปัจจุบัน เรียงตามเวลาที่ต้องกิน
         reminder_list = MedicationReminder.objects.filter(
-            prescription__patient__id= patients.id,  
+            prescription__patient__id= patients.id,
+            reminder_time__gte=current_date.time()  
         ).order_by('reminder_time', 'taken')  
 
         print(reminder_list)  
