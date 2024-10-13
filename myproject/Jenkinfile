@@ -10,9 +10,6 @@ pipeline {
     }
 
     stages {
-
-
-
         stage('Start Jenkins') {
             steps {
                 // Checkout your source code from version control
