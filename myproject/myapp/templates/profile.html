@@ -196,7 +196,7 @@
                 ข้อมูลแพทย์ที่ดูแล
             </h4>
             
-            <div class="doctor-card bg-white p-3 shadow-sm">
+            <div class="doctor-card bg-white p-3 shadow-sm mb-5">
                 <div class="row align-items-center">
                     <div class="col-auto">
                         <div class="rounded-circle doctor-icon text-white p-3">
@@ -204,9 +204,9 @@
                         </div>
                     </div>
                     <div class="col">
-                        <h5 class="mb-1">{{ user1.doctor.user.first_name }} {{ user1.doctor.user.last_name }}</h5>
-                        <p class="mb-1 text-muted">{{ user1.doctor.specialization }}</p>
-                        <small class="hospital-name">{{ user1.doctor.phone_number }}</small>
+                        <h5 class="mb-1">{{ user1.patient.doctor.user.first_name }} {{ user1.patient.doctor.user.last_name }}</h5>
+                        <p class="mb-1 text-muted">แพทย์ผู้เชี่ยวชาญ{{ user1.patient.doctor.specialization }}</p>
+                        <small class="hospital-name">{{ user1.patient.doctor.phone_number }}</small>
                     </div>
                 </div>
             </div>
