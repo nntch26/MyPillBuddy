@@ -85,7 +85,9 @@ class HistoryView(View):
 
 class MedicationView(View):
     def get(self, request):
-        return render(request, 'medication.html')
+        pre = Prescription.objects.filter(patient_id = request.user.id)
+        box = {'pre': pre}
+        return render(request, 'medication.html', box)
 
 
 # Doctor
@@ -120,8 +122,10 @@ class EditMedicationView(View):
             form.save()  
             return redirect('url_showmedication')
 
-        context = {"form": form, "medication": medication,}
+        # ส่งข้อมูล form และข้อมูลยาไปยัง template (แต่ในกรณีนี้ส่วนใหญ่ไม่จำเป็น)
+        context = {"form": form, "medication": medication}
         return render(request, 'temp_doctor/show_medication.html', context)
+
 
 
 
