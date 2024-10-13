@@ -4,16 +4,7 @@
 
 {% block title %} ตารางกินยา {% endblock title%}
 
-<!DOCTYPE html>
-<html lang="th">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ตารางกินยา</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-</head>
+
 {% block styles %}
 
     <style>
@@ -102,7 +93,6 @@
     }
 
     .med-description {
-        font-size: 0.9rem;
         color: #666;
     }
 
@@ -208,19 +198,19 @@
         <div class="med-card position-relative mt-5">
             <div class="d-flex">
                 <div class="med-details">
-                    <div class="med-name" style="margin-bottom: 3px;">{{ i.medication.name }}</div>
-                    <p style="font-size: 12px; margin-bottom: 3px;">ถูสั่งโดย {{ i.doctor }}</p>
-                    <div class="med-description">
+                    <h2 class="med-name mb-2" style="margin-bottom: 3px;">{{ i.medication.name }}</h2>
+                    <h6 class="med-name mb-2" style="margin-bottom: 3px;">ถูกสั่งโดย {{ i.doctor }}</้>
+                    <h5 class="med-description mb-2">
                         {% if i.medication.drugtype == 'tablet' %}
                         <i class="bi bi-capsule">  </i>
                         {% else %}
                         <i class="bi bi-prescription2">  </i>
                         {% endif %}
                         {{ i.medication.drugtype }} 
-                    </div>
-                    <div class="med-description"><i class="bi bi-egg-fried">  </i>{{ i.duration }}</div>
-                    <div class="med-description"><i class="bi bi-clock">  </i>{{ i.frequency }}</div>
-                    <div class="med-description"><i class="bi bi-journal">  </i>{{ i.notes }}</div>
+                    </h5>
+                    <h6 class="med-description"><i class="bi bi-egg-fried">  </i>( {{ i.duration }} )</h6>
+                    <h6 class="med-description"><i class="bi bi-clock">  </i>{{ i.frequency }}</h6>
+                    <h6 class="med-description"><i class="bi bi-journal">  </i>{{ i.notes }}</h6>
                 </div>
             </div>
         </div>

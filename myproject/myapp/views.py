@@ -7,13 +7,39 @@ from .forms import CustomUserCreationForm, AddMedicationForm, PrescriptionForm,M
 from .models import *
 from django.contrib.auth.models import Group
 
+from datetime import datetime
+
 class indexView(View):
     def get(self, request):
         return render(request, 'index.html')
 
+#//////////////////// แจ้งเตือนกินยา ///////////////////
+
+
 class HomeView(View):
     def get(self, request):
-        return render(request, 'home.html')
+        current_date = datetime.now()
+
+        patients = request.user
+        print(patients)  
+
+        reminder_list = MedicationReminder.objects.filter(prescription__patient__id=patients.id)
+        print(reminder_list)  
+
+
+        context = {
+            'current_date':current_date,
+            'reminder_list':reminder_list
+
+        }
+
+
+        return render(request, 'home.html', context)
+
+
+
+
+#//////////////////// สมัครสมาชิก ///////////////////
 
 class RegisterView(View):
     def get(self, request):
@@ -67,6 +93,7 @@ class LoginView(View):
         return render(request, 'login.html', {'form': form})
     
 
+#//////////////////// ส่วนคนไข้ ///////////////////
 
 class LogoutView(View):
     def get(self, request):
@@ -80,9 +107,7 @@ class ProfileView(View):
         box = {'user1': user1}
         return render(request, 'profile.html', box)
 
-class HistoryView(View):
-    def get(self, request):
-        return render(request, 'history.html')
+
 
 class MedicationView(View):
     def get(self, request):
@@ -161,6 +186,7 @@ class PrescriptionView(View):
 
     def get(self, request, patient_id):
         
+        print(patient_id)
         patient_select = User.objects.get(pk=patient_id)
        
         form = PrescriptionForm()
@@ -175,7 +201,7 @@ class PrescriptionView(View):
     def post(self, request, patient_id):
         
         doctor1 = get_object_or_404(Doctor, user=request.user)# หมอที่ล็อกอินอยู่
-        patient1 = get_object_or_404(Patient, id=patient_id) # หา id คนไข้
+        patient1 = get_object_or_404(User, id=patient_id) # หา id คนไข้
 
         form = PrescriptionForm(request.POST)
         print(form)
@@ -218,6 +244,7 @@ class DelPrescriptionView(View):
         print(prescription_get)
         
         patient = prescription_get.patient # ดึง patient ออกมา
+        print(patient)
 
         prescription_get.delete() 
         # กลับไปและส่ง id ของ patient ไปด้วย
@@ -306,7 +333,7 @@ class PatientListView(View):
             # ไม่เอา admin staff doctor
 
         doctor = get_object_or_404(Doctor, user=request.user) # หมอที่ล็อกอินอยู่
-        patient_list = Patient.objects.filter(doctor=doctor) # แสดงเฉพาะคนไข้ของหมอที่ล๊อคอินอยู่
+        patient_list = User.objects.filter(patient__doctor=doctor) # แสดงเฉพาะคนไข้ของหมอที่ล๊อคอินอยู่
         print(patient_list)
 
         context = {

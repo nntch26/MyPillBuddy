@@ -54,9 +54,9 @@ class Prescription(models.Model):
         ('หลังอาหาร', 'หลังอาหาร'),
     ]
 
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    patient = models.ForeignKey(User, on_delete=models.CASCADE)
     doctor = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True)
-    medication = models.OneToOneField(Medication, on_delete=models.CASCADE)
+    medication = models.ForeignKey(Medication, on_delete=models.CASCADE)
     frequency = models.CharField(max_length=155)  # ความถี่ในการกิน เช้า เย็น
     duration  = models.CharField(max_length=100, choices=TIME_CHOICES, default=None)
     notes = models.TextField(blank=True)

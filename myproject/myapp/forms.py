@@ -75,10 +75,6 @@ class PrescriptionForm(forms.ModelForm):
             "end_date": forms.DateInput(attrs={'type': 'date'}),
         }
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['start_date'].initial = date.today()
-
 
 class MedicationReminderForm(forms.ModelForm):
     class Meta:

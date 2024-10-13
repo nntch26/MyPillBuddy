@@ -209,9 +209,16 @@
                             <small>ช่วงเวลา: {{ prescript.duration }} | ความถี่: {{ prescript.frequency }}</small><br>
                             <small>หมายเหตุ: {{ prescript.notes }} | เริ่ม: {{ prescript.start_date }}</small>
                         </div>
-                        <a href="{% url 'url_delprescription' prescript.id %}"  class="btn btn-danger btn-sm">
-                            <i class="fas fa-trash"></i>
-                        </a>
+                        <div>
+                            <a href="{% url 'url_addreminder' prescript.id %}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-plus"></i> ตั้งเวลากินยา
+                            </a>
+
+                            <a href="{% url 'url_delprescription' prescript.id %}"  class="btn btn-danger btn-sm">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                       
                     </div>
                 </div>
             </div>
