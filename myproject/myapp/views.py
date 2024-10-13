@@ -7,12 +7,18 @@ from .forms import CustomUserCreationForm, AddMedicationForm, PrescriptionForm,M
 from .models import *
 from django.contrib.auth.models import Group
 
-from django.http import HttpResponse
+
 from gtts import gTTS
 import os
 from datetime import datetime
 import time
 from django.conf import settings
+import pygame
+
+from django.utils import timezone
+from datetime import datetime
+
+
 
 
 class indexView(View):
@@ -366,38 +372,70 @@ class PatientAddView(View):
 
 
 
-class AlertNotificationView(View):
+
+class NotifyAtTimeView(View):
     def get(self, request, *args, **kwargs):
-        target_time = "18:28:10"  # กำหนดเวลา (ไม่รวมวันที่)
-        
-        audio_folder = os.path.join(settings.BASE_DIR, 'myapp', 'static', 'audio')
-        
-        # สร้างโฟลเดอร์ถ้ายังไม่มี
-        if not os.path.exists(audio_folder):
-            os.makedirs(audio_folder)
-        
-        # วนลูปเช็คเวลาทุกๆ 1 วินาที
-        while True:
-            current_time = datetime.now().strftime("%H:%M:%S")  # เอาแค่เวลา
-            
-            if current_time == target_time:
-                # สร้างข้อความแจ้งเตือน
-                alert_message = "ได้เวลาทานยาแล้ว"
-                
-                # สร้างเสียงแจ้งเตือน
-                tts = gTTS(text=alert_message, lang='th')
-                audio_file_path = os.path.join(audio_folder, "reminder.mp3")
-                tts.save(audio_file_path)  # บันทึกไฟล์เสียงในโฟลเดอร์ที่กำหนด
+        # ดึงข้อมูล reminder จาก MedicationReminder ที่ยังไม่ได้ถูกทำเครื่องหมายว่าได้รับยาแล้ว
+        reminder = MedicationReminder.objects.filter(taken=False).first()  # เลือกตัวแรกที่ยังไม่ได้กินยา
 
-                # ส่ง URL ของไฟล์เสียงไปยังหน้าเว็บ
-                audio_url = '/static/audio/reminder.mp3'
-                return render(request, 'alert_notification.html', {'audio_url': audio_url})
+        if reminder:  # ถ้ามีข้อมูลการเตือนยา
+            # ใช้ timezone.localtime เพื่อให้แน่ใจว่าเวลาเป็นเขตเวลาในท้องถิ่น
+            current_time = timezone.localtime(timezone.now()).time().replace(microsecond=0)
+            reminder_time = reminder.reminder_time
 
-            # เช็คว่าเวลาผ่านไปแล้วหรือยัง
-            if datetime.now().strftime("%H:%M:%S") > target_time:
-                # ส่งข้อความว่า "เลยเวลาทานยาแล้ว"
-                return HttpResponse("เลยเวลาทานยาแล้ว")
-            
-            # หน่วงเวลา 1 วินาที
-            time.sleep(1)
+            # เช็คค่าของ reminder_time และ current_time
+            print(f"Reminder time from DB: {reminder_time}")
+            print(f"Current time: {current_time}")
+
+            # แปลงทั้งสองเป็น datetime object เพื่อเปรียบเทียบ
+            current_dt = datetime.combine(datetime.today(), current_time)
+            reminder_dt = datetime.combine(datetime.today(), reminder_time)
+
+            # เปรียบเทียบเวลา
+            if current_dt == reminder_dt:
+                message = f"ถึงเวลาทานยาแล้ว: {reminder.prescription.medication.name}"
+                context = {'notification': message}
+
+                # เส้นทางไปยังโฟลเดอร์ static/audio
+                audio_folder = os.path.join(settings.BASE_DIR, 'myapp', 'static', 'audio')
+                audio_file = os.path.join(audio_folder, 'reminder.mp3')
+
+                # ตรวจสอบให้แน่ใจว่าโฟลเดอร์ audio มีอยู่แล้ว
+                if not os.path.exists(audio_folder):
+                    os.makedirs(audio_folder)
+
+                # สร้างไฟล์เสียง
+                tts = gTTS(message, lang='th')
+                tts.save(audio_file)
+
+                # เริ่มต้น Pygame mixer
+                pygame.mixer.init()
+
+                # โหลดและเล่นไฟล์เสียง
+                pygame.mixer.music.load(audio_file)
+                pygame.mixer.music.play()
+
+                # รอจนกว่าเสียงจะเล่นจบ
+                while pygame.mixer.music.get_busy():
+                    time.sleep(1)
+
+                # หลังจากเล่นเสร็จแล้ว ปิด Pygame mixer เพื่อให้ไฟล์ไม่ถูกล็อก
+                pygame.mixer.quit()
+
+            elif current_dt > reminder_dt:
+                # เลยเวลาที่กำหนด
+                message = "เลยเวลาที่กำหนดทานยา"
+                context = {'notification': message}
+            else:
+                # ยังไม่ถึงเวลา
+                message = "ยังไม่ถึงเวลาทานยา"
+                context = {'notification': message}
+        else:
+            # ไม่มีข้อมูลการเตือนยา
+            message = "ไม่มีการตั้งเตือนยา"
+            context = {'notification': message}
+
+        # ส่งข้อมูลไปยัง template
+        return render(request, 'notify.html', context)
+
 

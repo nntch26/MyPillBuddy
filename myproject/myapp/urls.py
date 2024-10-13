@@ -35,5 +35,6 @@ urlpatterns = [
     path("patient_list/del/<int:patient_id>", PatientDelView.as_view(), name="url_delpatient"),
     path("patient_list/seach/", PatientListView.as_view(), name="seach"),
 
-    path('alert/', AlertNotificationView.as_view(), name='alert_notification'),
+    path('notify/', NotifyAtTimeView.as_view(), name='notify_at_time'),
+    
 ]
