@@ -120,8 +120,10 @@ class EditMedicationView(View):
             form.save()  
             return redirect('url_showmedication')
 
-        context = {"form": form, "medication": medication,}
+        # ส่งข้อมูล form และข้อมูลยาไปยัง template (แต่ในกรณีนี้ส่วนใหญ่ไม่จำเป็น)
+        context = {"form": form, "medication": medication}
         return render(request, 'temp_doctor/show_medication.html', context)
+
 
 
 
