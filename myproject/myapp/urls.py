@@ -17,8 +17,10 @@ urlpatterns = [
     path("doctor/", DoctorView.as_view(), name="url_doctor"),
     path("Prescription/<int:patient_id>/", PrescriptionView.as_view(), name="url_prescription"),
     path("Prescription/<int:patient_id>/add/", PrescriptionView.as_view(), name="url_addprescription"),
-    path("Reminder/<int:id>/", ReminderView.as_view(), name="url_reminder"),
 
+    path("Reminder/<int:id>/", AddReminderView.as_view(), name="url_addreminder"),
+    path("Reminder/<int:id>/add", AddReminderView.as_view(), name="url_addreminder2"),
+    path("Reminder/<int:id>/del", DelReminderView.as_view(), name="url_delreminder"),
 
     path("ShowMedication/", ShowMedicationView.as_view(), name="url_showmedication"),
     path("DeleteMedication/<int:id>/", DeleteMedicationView.as_view(), name="url_deletemedication"),

@@ -83,10 +83,9 @@ class PrescriptionForm(forms.ModelForm):
 class MedicationReminderForm(forms.ModelForm):
     class Meta:
         model = MedicationReminder
-        fields = ['prescription', 'reminder_time']
+        fields = ['reminder_time']
 
         labels = {
-            'prescription': 'ใบสั่งยา',
             'reminder_time': 'เวลาที่ต้องกินยา',
         }
 

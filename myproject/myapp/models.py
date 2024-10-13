@@ -65,12 +65,12 @@ class Prescription(models.Model):
 
 
     def __str__(self):
-        return f"{self.medication.name} - {self.patient.full_name}"
+        return f"{self.medication.name} - {self.patient.id}"
 
 
 class MedicationReminder(models.Model):
     prescription = models.ForeignKey(Prescription, on_delete=models.CASCADE)
-    reminder_time = models.DateTimeField()
+    reminder_time = models.TimeField()
     taken = models.BooleanField(default=False) # กินยายัง
 
     def __str__(self):

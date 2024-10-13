@@ -163,10 +163,10 @@ class PrescriptionView(View):
         if form.is_valid():
             form.instance.patient = patient1
             form.instance.doctor = doctor1
-            prescription = form.save()  # บันทึกใบสั่งยาและคืนค่าวัตถุที่ถูกบันทึก
+            prescription = form.save()  
 
             # ส่งใบสั่งยาเมื้อกี้ที่สร้าง ไปหน้าตั้งเวลา
-            return redirect('url_addMedReminder', id= prescription.id)
+            return redirect('url_addreminder', id= prescription.id)
 
 
         patient_select = User.objects.get(pk=patient_id)
@@ -188,17 +188,57 @@ class AddReminderView(View):
         form = MedicationReminderForm()
         context = {
             'form':form, 
-            'reminder_list':reminder_list
+            'reminder_list':reminder_list,
+            'id': id
         }
             
         return render(request, 'temp_doctor/reminder.html', context)
 
 
+    def post(self, request, id):
+
+        prescription1 = get_object_or_404(Prescription, pk=id)  # ดึง Prescription จาก id ที่ส่งมา
+        print(prescription1)
+
+        form = MedicationReminderForm(request.POST)
+        print(form)
+        print(form.errors)
+        
+        
+        if form.is_valid():
+            form.instance.prescription = prescription1
+            form.save()
+            return redirect('url_addreminder', id=id)
+
+
+        reminder_list = MedicationReminder.objects.filter(prescription__id=id)
+
+        form = MedicationReminderForm()
+        context = {
+            'form':form, 
+            'reminder_list':reminder_list,
+            'id': id
+        }
+        
+        return render(request, 'temp_doctor/reminder.html', context)
 
 
 
+class DelReminderView(View):
 
+    def get(self, request, id):
+        reminder_get = get_object_or_404(MedicationReminder, pk=id)
+        print(reminder_get)
+        
+        prescription = reminder_get.prescription # ดึง prescription ออกมา
 
+        reminder_get.delete() # ลบเวลานี้
+
+        
+        # กลับไป addreminder และส่ง id ของ prescription ไปด้วย
+        return redirect('url_addreminder', id=prescription.id)
+
+            
 
 #//////////////////// รายชื่อคนไข้ ///////////////////
 
@@ -251,9 +291,9 @@ class PatientAddView(View):
         return redirect('url_patientlist')
 
 
-class ReminderView(View):
-    def get(self, request):
-        return render(request,  'temp_doctor/reminder.html')
+# class ReminderView(View):
+#     def get(self, request):
+#         return render(request,  'temp_doctor/reminder.html')
     
 
 

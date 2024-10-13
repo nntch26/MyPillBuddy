@@ -79,7 +79,7 @@
                 {% for r in reminder_list %}
                 <div class="divcus d-flex align-items-center mb-3 rounded p-2">
                     <span class="flex-grow-1">{{ r.reminder_time }}</span>
-                    <button class="btn btn-danger btn-sm rounded-circle ms-2">×</button>
+                    <a  href="{% url 'url_delreminder' r.id %}" class="btn btn-danger btn-sm rounded-circle ms-2">×</a>
                 </div>
                 {% endfor %}
                 {% endif %}
@@ -87,18 +87,38 @@
                 
 
                 <!-- ปุ่มสำหรับเพิ่มเวลา -->
-                <button id="add-time-button" class="btn btn-light text-primary w-100 mb-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus me-2">
-                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg>
+                <button id="add-time-button" class="btn btn-light text-primary w-100 mb-3" 
+                data-bs-toggle="modal" data-bs-target="#exampleModal">
                     เพิ่มเวลา
                 </button>
 
-                <button class="btn btn-primary w-100">
+                <a href="{% url 'url_patientlist' %}" class="btn btn-primary w-100">
                     เสร็จสิ้น
-                </button>
+                </a>
             </div>
         </main>
     </div>
+
+
+    <!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">เพิ่มเวลา</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- ฟอร์มสำหรับการเพิ่มเวลา -->
+                <form method="POST" action="{% url 'url_addreminder2' id %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        {{ form.reminder_time|as_crispy_field }}
+                    </div>
+                    <button type="submit" class="btn btn-primary">บันทึก</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
     {% endblock content %}
