@@ -85,7 +85,9 @@ class HistoryView(View):
 
 class MedicationView(View):
     def get(self, request):
-        return render(request, 'medication.html')
+        pre = Prescription.objects.filter(patient_id = request.user.id)
+        box = {'pre': pre}
+        return render(request, 'medication.html', box)
 
 
 # Doctor

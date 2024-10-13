@@ -204,40 +204,27 @@
 
     <div class="container med-container">
 
+        {% for i in pre %}
         <div class="med-card position-relative mt-5">
             <div class="d-flex">
                 <div class="med-details">
-                    <div class="med-name">medicine test1</div>
-                    <div class="med-description">for test</div>
-                    <div class="med-description">กิน ครั้งละ 1 เม็ด</div>
-                    <div class="med-description">ก่อนอาหาร</div>
-                    <div class="med-description">เช้า, กลางวัน, เย็น, ก่อนนอน</div>
+                    <div class="med-name" style="margin-bottom: 3px;">{{ i.medication.name }}</div>
+                    <p style="font-size: 12px; margin-bottom: 3px;">ถูสั่งโดย {{ i.doctor }}</p>
+                    <div class="med-description">
+                        {% if i.medication.drugtype == 'tablet' %}
+                        <i class="bi bi-capsule">  </i>
+                        {% else %}
+                        <i class="bi bi-prescription2">  </i>
+                        {% endif %}
+                        {{ i.medication.drugtype }} 
+                    </div>
+                    <div class="med-description"><i class="bi bi-egg-fried">  </i>{{ i.duration }}</div>
+                    <div class="med-description"><i class="bi bi-clock">  </i>{{ i.frequency }}</div>
+                    <div class="med-description"><i class="bi bi-journal">  </i>{{ i.notes }}</div>
                 </div>
             </div>
         </div>
+        {% endfor %}
 
-        <div class="med-card position-relative">
-            <div class="d-flex">
-                <div class="med-details">
-                    <div class="med-name">medicine test2</div>
-                    <div class="med-description">for test</div>
-                    <div class="med-description">กิน ครั้งละ 1 ช้อนชา</div>
-                    <div class="med-description">หลังอาหาร</div>
-                    <div class="med-description">เช้า, กลางวัน, เย็น, ก่อนนอน</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="med-card position-relative">
-            <div class="d-flex">
-                <div class="med-details">
-                    <div class="med-name">medicine test3</div>
-                    <div class="med-description">for test</div>
-                    <div class="med-description">ฉีด ครั้งละ 1 มิลลิกรัม</div>
-                    <div class="med-description">ก่อนอาหาร</div>
-                    <div class="med-description">เช้า, กลางวัน, เย็น, ก่อนนอน</div>
-                </div>
-            </div>
-        </div>
     </div>
 {% endblock content %}
