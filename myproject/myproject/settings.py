@@ -88,12 +88,11 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "mydb",
-        "USER": "postgres",
-        "PASSWORD": "1234",
-        "HOST": "localhost",
-        "PORT": "5432",
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'HOST': '34.126.166.32',
+        'USER': 'postgres',
+        'PASSWORD': 'projectdevtools',
+        'NAME': 'mydb',
     }
 }
 

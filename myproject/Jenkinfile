@@ -2,73 +2,92 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'beztth/devtools_app'
+        DOCKER_IMAGE    = 'beztth/devtools_app:latest'
+        REMOTE_HOST     = 'useless2375@35.198.243.227'
+        SSH_CREDENTIALS = 'ssh-prod_instance'
         DOCKER_CREDENTIALS = credentials('dockerhub')
+
     }
 
     stages {
+
+
+
         stage('Start Jenkins') {
             steps {
-                sh 'echo Start Jenkins............'
-                sh 'echo docker : user = $DOCKER_CREDENTIALS_USR : password = $DOCKER_CREDENTIALS_PSW'
+                // Checkout your source code from version control
+             
+                    sh 'echo Start Jenkins............'
+                    sh 'echo docker : user = $DOCKER_CREDENTIALS_USR : password = $DOCKER_CREDENTIALS_PSW'
             }
         }
 
-        stage('Build Docker Image with Compose') {
+        stage('Build Docker Image') {
             steps {
-                dir('./myproject') {
-                    sh 'echo "Running in $(pwd)"'
-                    sh 'echo start build the Docker image with Compose = $DOCKER_IMAGE'
-                    // Build the image using docker-compose
-                    sh 'docker-compose build'
-                }
+                    // Build the Docker image
+                    
+                    dir('./myproject') {
+                       sh 'echo "Running in $(pwd)"'
+                       sh 'echo start build the Docker image = $DOCKER_IMAGE'
+                       sh 'docker build -t $DOCKER_IMAGE .'
+                    }   
+                  
             }
         }
+
+        
 
         stage('Push to Docker Hub') {
             steps {
                 script {
+                    
                     // Login to Docker Hub
                     sh 'echo $DOCKER_CREDENTIALS_PSW | docker login --username $DOCKER_CREDENTIALS_USR --password-stdin'
-                    // Tag the built image with the correct name
-                    sh 'docker tag django_app $DOCKER_IMAGE'
                     // Push the image
                     sh 'docker push $DOCKER_IMAGE'
                 }
             }
         }
 
-        stage('Clear Docker Components') {
+
+
+
+        stage('SSH to Remote Server') {
             steps {
                 script {
-                    // Navigate to the project directory that contains docker-compose.yml
-                    dir('./myproject') {
-                        // Stop and remove all containers defined in the compose file
-                        sh 'docker-compose down'
-                        sh 'docker system prune -af'
+                    // ใช้ SSH เข้าสู่เซิร์ฟเวอร์0
+                    sshagent([SSH_CREDENTIALS]) {
+                        sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'echo Connected to remote server'"
                     }
                 }
             }
         }
 
-        stage('Deploy with Docker Compose') {
+
+        stage('Pull and Run Docker image on Remote Server') {
             steps {
-                script {
-                    // Navigate to the project directory that contains docker-compose.yml
-                    dir('./myproject') {
-                        // Pull the latest image from Docker Hub
-                        sh 'docker pull $DOCKER_IMAGE'
-                        // Bring up the services with Docker Compose
-                        sh 'docker compose up'
-                    }
+                // Uses the SSH Agent plugin to setup SSH credentials.
+                sshagent([SSH_CREDENTIALS]) {
+                    // These commands manage Docker containers on the remote server.
+                    // It stops and removes all containers, then removes all images, before running a new container.
+                    sh 'docker pull $DOCKER_IMAGE'
+                    sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'docker stop \$(docker ps -a -q) || true'"
+                    sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'docker rm \$(docker ps -a -q) || true'"
+                    sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'docker rmi \$(docker images -q) || true'"
+                    sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'docker run -d --name devtools_app -p 8000:8000 $DOCKER_IMAGE'"
+                    sh "ssh -o StrictHostKeyChecking=no $REMOTE_HOST 'docker ps -a'"
                 }
             }
         }
+
+
+
+
+        
     }
 
     post {
         always {
-            // Logout from Docker Hub
             sh 'docker logout'
         }
     }
