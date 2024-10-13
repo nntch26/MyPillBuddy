@@ -130,11 +130,27 @@ class EditMedicationView(View):
 
 
 
-#//////////////////// หน้าหลัก ///////////////////
+#//////////////////// หน้าหลักของหมอ ///////////////////
 
 class DoctorView(View):
     def get(self, request):
-        return render(request, 'temp_doctor/doctor.html')
+        doctor = get_object_or_404(Doctor, user=request.user) # หมอที่ล็อกอินอยู่
+        patient_list = Patient.objects.filter(doctor=doctor) # แสดงเฉพาะคนไข้ของหมอที่ล๊อคอินอยู่
+
+        prescription_list = Prescription.objects.filter(doctor=doctor).order_by("-id")
+        print(prescription_list)
+
+        medication_list = Medication.objects.all()
+
+
+        context = {
+            'prescription_list':prescription_list,
+            'patient_list':patient_list,
+            'medication_list':medication_list
+        }
+
+
+        return render(request, 'temp_doctor/doctor.html', context)
     
 
 #//////////////////// ใบสั่งยา ///////////////////
@@ -318,11 +334,4 @@ class PatientAddView(View):
         # เพิ่มคนไข้ให้กับหมอ
         doctor.patients.add(patient)
         return redirect('url_patientlist')
-
-
-# class ReminderView(View):
-#     def get(self, request):
-#         return render(request,  'temp_doctor/reminder.html')
-    
-
 

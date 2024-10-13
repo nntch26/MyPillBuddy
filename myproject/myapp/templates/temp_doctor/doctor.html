@@ -106,36 +106,20 @@
             <div class="col-md-8">
                 <div class="card mb-4">
                     <div class="card-body">
-                        <h5 class="card-title mb-3">รายชื่อคนไข้</h5>
-                        <input type="text" class="form-control search-bar mb-4" placeholder="ค้นหาคนไข้...">
-                        
+                
                         <div class="patient-list">
-                            <div class="patient-card p-3 d-flex align-items-center mb-2">
-                                <i class="fas fa-user profile-img me-3"></i>
-                                <div>
-                                    <h6 class="mb-1">นางสาวสมหญิง รักษ์สุขภาพ</h6>
-                                    <small class="text-muted">HN: 12345 • อายุ: 35 ปี</small>
-                                </div>
-                                <span class="ms-auto badge bg-success status-badge">มาตามนัด</span>
-                            </div>
 
+                            {% for p in patient_list%}
                             <div class="patient-card p-3 d-flex align-items-center mb-2">
                                 <i class="fas fa-user profile-img me-3"></i>
                                 <div>
-                                    <h6 class="mb-1">นายสมชาย สุขสันต์</h6>
-                                    <small class="text-muted">HN: 12346 • อายุ: 42 ปี</small>
+                                    <h6 class="mb-1">{{ p.user.first_name }} {{ p.user.last_name }}</h6>
+                                    <small class="text-muted">HN: {{ p.user.id }} | เบอร์โทร: {{ p.phone_number }}</small>
                                 </div>
-                                <span class="ms-auto badge bg-warning status-badge">รอพบแพทย์</span>
                             </div>
+                            {% endfor %}
 
-                            <div class="patient-card p-3 d-flex align-items-center mb-2">
-                                <i class="fas fa-user profile-img me-3"></i>
-                                <div>
-                                    <h6 class="mb-1">เด็กหญิงน้ำใส ใจดี</h6>
-                                    <small class="text-muted">HN: 12347 • อายุ: 12 ปี</small>
-                                </div>
-                                <span class="ms-auto badge bg-info status-badge">นัดติดตามผล</span>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -144,21 +128,19 @@
                     <div class="card-body">
                         <h5 class="card-title mb-3">ประวัติการจ่ายยาล่าสุด</h5>
                         <div class="medicine-list">
-                            <div class="medicine-item d-flex align-items-center">
-                                <div>
-                                    <h6 class="mb-1">นางสาวสมหญิง รักษ์สุขภาพ</h6>
-                                    <small class="text-muted">Paracetamol 500mg - 1 เม็ด ทุก 6 ชั่วโมง</small>
-                                </div>
-                                <small class="ms-auto text-muted">15 นาทีที่แล้ว</small>
-                            </div>
 
+
+                            {% for pcript in prescription_list%}
                             <div class="medicine-item d-flex align-items-center">
                                 <div>
-                                    <h6 class="mb-1">นายสมชาย สุขสันต์</h6>
-                                    <small class="text-muted">Amoxicillin 500mg - 1 เม็ด วันละ 3 ครั้ง</small>
+                                    <h6 class="mb-1">{{ pcript.patient.user.first_name }} {{ pcript.patient.user.last_name }}</h6>
+                                    <small class="text-muted">{{ pcript.medication.name }} - {{ pcript.frequency }} {{ pcript.notes }}</small>
                                 </div>
-                                <small class="ms-auto text-muted">1 ชั่วโมงที่แล้ว</small>
+                                <small class="ms-auto text-muted">{{ pcript.start_date }}</small>
                             </div>
+                            {% endfor %}
+
+                          
                         </div>
                     </div>
                 </div>
@@ -169,27 +151,16 @@
                     <div class="card-body">
                         <h5 class="card-title mb-3">รายการยาที่ใช้บ่อย</h5>
                         <div class="list-group">
+
+                            {% for m in medication_list %}
                             <a href="#" class="list-group-item list-group-item-action">
                                 <div class="d-flex w-100 justify-content-between">
-                                    <h6 class="mb-1">Paracetamol 500mg</h6>
-                                    <small class="text-muted">ยาแก้ปวด</small>
+                                    <h6 class="mb-1">{{ m.name }}</h6>
+                                    <small class="text-muted">{{ m.drugtype }}</small>
                                 </div>
-                                <small class="text-muted">จ่าย 150 ครั้งในเดือนนี้</small>
                             </a>
-                            <a href="#" class="list-group-item list-group-item-action">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h6 class="mb-1">Amoxicillin 500mg</h6>
-                                    <small class="text-muted">ยาปฏิชีวนะ</small>
-                                </div>
-                                <small class="text-muted">จ่าย 89 ครั้งในเดือนนี้</small>
-                            </a>
-                            <a href="#" class="list-group-item list-group-item-action">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h6 class="mb-1">Omeprazole 20mg</h6>
-                                    <small class="text-muted">ยาลดกรด</small>
-                                </div>
-                                <small class="text-muted">จ่าย 75 ครั้งในเดือนนี้</small>
-                            </a>
+                            {% endfor %}
+                            
                         </div>
                     </div>
                 </div>

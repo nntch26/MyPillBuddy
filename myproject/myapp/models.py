@@ -14,9 +14,9 @@ class Doctor(models.Model):
 
 class Patient(models.Model):
     GENDER_CHOICES = [
-        ('male', 'ชาย'),
-        ('female', 'หญืง'),
-        ('othor', 'ไม่ระบุ'),
+        ('ชาย', 'ชาย'),
+        ('หญิง', 'หญิง'),
+        ('ไม่ระบุ', 'ไม่ระบุ'),
     ]
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -36,8 +36,8 @@ class Patient(models.Model):
 class Medication(models.Model):
 
     TYPE_CHOICES = [
-        ('tablet', 'ยาเม็ด'),
-        ('liquid', 'ยาน้ำ'),
+        ('ยาเม็ด', 'ยาเม็ด'),
+        ('ยาน้ำ', 'ยาน้ำ'),
 
     ]
 
