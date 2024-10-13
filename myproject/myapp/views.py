@@ -10,7 +10,7 @@ from django.contrib.auth.models import Group
 from django.http import HttpResponse
 from gtts import gTTS
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 import time
 from django.conf import settings
 
@@ -23,6 +23,7 @@ class HomeView(View):
     def get(self, request):
         current_date = datetime.now()
         take = request.GET.get('click', None)
+        current_time_plus_five = (datetime.now() + timedelta(minutes=5)).time()
 
         if take:
             medi = MedicationReminder.objects.get(id=take)
@@ -40,10 +41,11 @@ class HomeView(View):
          # ดึงรายการยาที่ต้องกินตามเวลาปัจจุบัน เรียงตามเวลาที่ต้องกิน
         reminder_list = MedicationReminder.objects.filter(
             prescription__patient__id= patients.id,
-            reminder_time__gte=current_date.time()  
+            reminder_time__gte=current_time_plus_five  
         ).order_by('reminder_time', 'taken')  
 
-        print(reminder_list)  
+        print(reminder_list)
+        print(remimder_late)
 
 
         context = {
