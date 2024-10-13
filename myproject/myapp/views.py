@@ -26,7 +26,13 @@ class HomeView(View):
         patients = request.user
         print(patients)  
 
-        reminder_list = MedicationReminder.objects.filter(prescription__patient__id=patients.id)
+         # ดึงรายการยาที่ต้องกินตามเวลาปัจจุบัน เรียงตามเวลาที่ต้องกิน
+        reminder_list = MedicationReminder.objects.filter(
+            prescription__patient__id= patients.id,  
+            taken=False,  # เฉพาะที่ยังไม่ถูกกิน
+            reminder_time__gte=current_date.time()  # เวลาที่ต้องกินต้องมากกว่าหรือเท่ากับเวลาปัจจุบัน
+        ).order_by('reminder_time')  
+
         print(reminder_list)  
 
 
