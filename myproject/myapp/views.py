@@ -75,8 +75,9 @@ class LogoutView(View):
 
 class ProfileView(View):
     def get(self, request):
-        patient = Patient.objects.get(id=request.user.id)
-        box = {'patient': patient}
+        user1 = User.objects.get(id=request.user.id)
+        print(user1)
+        box = {'user1': user1}
         return render(request, 'profile.html', box)
 
 class HistoryView(View):
@@ -328,10 +329,8 @@ class PatientAddView(View):
     def get(self, request, patient_id):
         
         doctor = get_object_or_404(Doctor, user=request.user)# หมอที่ล็อกอินอยู่
-        patient_list = Patient.objects.filter(doctor=doctor)
-        form = PrescriptionForm()
+        patient = get_object_or_404(Patient, user__id=patient_id) # หา id คนไข้
 
         # เพิ่มคนไข้ให้กับหมอ
         doctor.patients.add(patient)
         return redirect('url_patientlist')
-
