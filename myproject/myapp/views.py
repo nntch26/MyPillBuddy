@@ -137,7 +137,7 @@ class DoctorView(View):
         return render(request, 'temp_doctor/doctor.html')
     
 
-#//////////////////// สั่งยา ///////////////////
+#//////////////////// ใบสั่งยา ///////////////////
 
 
 class PrescriptionView(View):
@@ -145,11 +145,11 @@ class PrescriptionView(View):
     def get(self, request, patient_id):
         
         patient_select = User.objects.get(pk=patient_id)
-
+       
         form = PrescriptionForm()
         context = {
             'form':form, 
-            'patient_select':patient_select
+            'patient_select':patient_select,
         }
         
         return render(request, 'temp_doctor/prescription.html', context)
@@ -182,6 +182,33 @@ class PrescriptionView(View):
         }
         return render(request, 'temp_doctor/prescription.html', context)
     
+class PrescriptionListView(View):
+    def get(self, request, patient_id):
+        prescription_list = Prescription.objects.filter(patient__id=patient_id)
+        print(prescription_list)
+
+        context = {
+            'prescription_list':prescription_list,
+        }
+
+        return render(request, 'temp_doctor/prescription_list.html', context)
+
+
+class DelPrescriptionView(View):
+    
+    def get(self, request, prescript_id):
+        prescription_get = get_object_or_404(Prescription, pk=prescript_id)
+        print(prescription_get)
+        
+        patient = prescription_get.patient # ดึง patient ออกมา
+
+        prescription_get.delete() 
+        # กลับไปและส่ง id ของ patient ไปด้วย
+        return redirect('url_prescription_list', patient_id=patient.id)
+
+
+
+#//////////////////// ตั้งเวลาแจ้งเตือน ///////////////////
 
 class AddReminderView(View):
 
@@ -238,7 +265,6 @@ class DelReminderView(View):
 
         reminder_get.delete() # ลบเวลานี้
 
-        
         # กลับไป addreminder และส่ง id ของ prescription ไปด้วย
         return redirect('url_addreminder', id=prescription.id)
 
@@ -248,7 +274,8 @@ class DelReminderView(View):
 
 class PatientListView(View):
     def get(self, request):
-        data = request.GET.get('search', '')
+        data = request.GET.get('search', None)
+
 
         if data:
             # ค้นหาคนไข้จาก ID หรืออื่นๆ
@@ -261,15 +288,13 @@ class PatientListView(View):
             ) 
             # ไม่เอา admin staff doctor
 
-        doctor = get_object_or_404(Doctor, user=request.user)# หมอที่ล็อกอินอยู่
-        patient_list = Patient.objects.filter(doctor=doctor)
-
-        # แสดงเฉพาะคนไข้ของหมอที่ล๊อคอินอยู่
+        doctor = get_object_or_404(Doctor, user=request.user) # หมอที่ล็อกอินอยู่
+        patient_list = Patient.objects.filter(doctor=doctor) # แสดงเฉพาะคนไข้ของหมอที่ล๊อคอินอยู่
         print(patient_list)
 
         context = {
             'patient_list':patient_list,
-            'patient_all':patient_all
+            'patient_all':patient_all,
         }
 
         return render(request, 'temp_doctor/patient_list.html', context)
