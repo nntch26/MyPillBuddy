@@ -178,7 +178,7 @@
     document.addEventListener('click', function() {
         const sound = document.getElementById('notification-sound');
         sound.play().then(() => {
-            sound.pause(); // เล่นและหยุดเพื่อเตรียมให้ระบบเล่นได้หลังมีการโต้ตอบ
+            // sound.pause(); // เล่นและหยุดเพื่อเตรียมให้ระบบเล่นได้หลังมีการโต้ตอบ
             console.log('Audio ready to play after user interaction');
         }).catch(error => {
             console.log('Initial interaction failed:', error);
