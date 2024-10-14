@@ -13,7 +13,7 @@ import os
 from datetime import datetime, timedelta
 import time
 from django.conf import settings
-# import pygame
+import pygame
 
 from django.utils import timezone
 from datetime import datetime
