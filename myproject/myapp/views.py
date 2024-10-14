@@ -16,7 +16,6 @@ from django.conf import settings
 import pygame
 
 from django.utils import timezone
-from datetime import datetime
 import time
 import datetime
 
@@ -29,7 +28,7 @@ class indexView(View):
 class HomeView(View):
 
     def get(self, request):
-        current_date = datetime.now()
+        current_date = datetime.datetime.now()
         take = request.GET.get('click', None)
 
         # กดกินยาแล้ว
