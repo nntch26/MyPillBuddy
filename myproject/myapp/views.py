@@ -13,11 +13,12 @@ import os
 from datetime import datetime, timedelta
 import time
 from django.conf import settings
-# import pygame
+import pygame
 
 from django.utils import timezone
 from datetime import datetime
-
+import time
+import datetime
 
 
 
@@ -413,35 +414,42 @@ class PatientAddView(View):
 class NotifyAtTimeView(View):
     def get(self, request, *args, **kwargs):
         # ดึงข้อมูล reminder จาก MedicationReminder ที่ยังไม่ได้ถูกทำเครื่องหมายว่าได้รับยาแล้ว
-        reminder = MedicationReminder.objects.filter(taken=False).first()  # เลือกตัวแรกที่ยังไม่ได้กินยา
+        reminders = MedicationReminder.objects.filter(taken=False)  # ดึงข้อมูลที่ยังไม่ได้กินยา
+        print(reminders)
+        
+        # ใช้ timezone.localtime เพื่อให้แน่ใจว่าเวลาเป็นเขตเวลาในท้องถิ่น
+        current_time = timezone.localtime(timezone.now()).time().replace(microsecond=0)
+        current_dt = datetime.datetime.combine(datetime.date.today(), current_time)
 
-        if reminder:  # ถ้ามีข้อมูลการเตือนยา
-            # ใช้ timezone.localtime เพื่อให้แน่ใจว่าเวลาเป็นเขตเวลาในท้องถิ่น
-            current_time = timezone.localtime(timezone.now()).time().replace(microsecond=0)
+        notification_messages = []
+        audio_folder = os.path.join(settings.BASE_DIR, 'myapp', 'static', 'audio')
+
+        # วนลูปตรวจสอบแต่ละ reminder
+        for reminder in reminders:
             reminder_time = reminder.reminder_time
 
-            # เช็คค่าของ reminder_time และ current_time
-            print(f"Reminder time from DB: {reminder_time}")
-            print(f"Current time: {current_time}")
+            # แปลง reminder_time เป็น datetime object
+            reminder_dt = datetime.datetime.combine(datetime.date.today(), reminder_time)
 
-            # แปลงทั้งสองเป็น datetime object เพื่อเปรียบเทียบ
-            current_dt = datetime.combine(datetime.today(), current_time)
-            reminder_dt = datetime.combine(datetime.today(), reminder_time)
-
-            # เปรียบเทียบเวลา
+            # ถ้าเวลาปัจจุบันตรงกับ reminder_time
             if current_dt == reminder_dt:
                 message = f"ถึงเวลาทานยาแล้ว: {reminder.prescription.medication.name}"
-                context = {'notification': message}
+                notification_messages.append(message)
 
-                # เส้นทางไปยังโฟลเดอร์ static/audio
-                audio_folder = os.path.join(settings.BASE_DIR, 'myapp', 'static', 'audio')
-                audio_file = os.path.join(audio_folder, 'reminder.mp3')
+                print(f"Reminder time from DB: {reminder_time}")
+                print(f"Current time: {current_time}")
 
                 # ตรวจสอบให้แน่ใจว่าโฟลเดอร์ audio มีอยู่แล้ว
                 if not os.path.exists(audio_folder):
                     os.makedirs(audio_folder)
 
-                # สร้างไฟล์เสียง
+                audio_file = os.path.join(audio_folder, 'reminder.mp3')
+
+                # ถ้ามีไฟล์แล้ว ให้ลบไฟล์เก่า
+                if os.path.exists(audio_file):
+                    os.remove(audio_file)
+
+                # สร้างไฟล์เสียงสำหรับการแจ้งเตือนแต่ละครั้ง
                 tts = gTTS(message, lang='th')
                 tts.save(audio_file)
 
@@ -456,23 +464,24 @@ class NotifyAtTimeView(View):
                 while pygame.mixer.music.get_busy():
                     time.sleep(1)
 
-                # หลังจากเล่นเสร็จแล้ว ปิด Pygame mixer เพื่อให้ไฟล์ไม่ถูกล็อก
+                # ปิด Pygame mixer เพื่อไม่ให้ไฟล์ถูกล็อก
                 pygame.mixer.quit()
 
+            # ถ้าเวลาปัจจุบันยังไม่ถึงเวลาทานยา
+            elif current_dt < reminder_dt:
+                message = f"ยังไม่ถึงเวลาทานยา: {reminder.prescription.medication.name}"
+                notification_messages.append(message)
+
+            # ถ้าเวลาปัจจุบันเลยเวลาไปแล้ว (เผื่อในกรณีที่ระบบมาช้ากว่าเวลาจริง)
             elif current_dt > reminder_dt:
-                # เลยเวลาที่กำหนด
-                message = "เลยเวลาที่กำหนดทานยา"
-                context = {'notification': message}
-            else:
-                # ยังไม่ถึงเวลา
-                message = "ยังไม่ถึงเวลาทานยา"
-                context = {'notification': message}
+                message = f"เลยเวลาทานยาแล้ว: {reminder.prescription.medication.name}"
+                notification_messages.append(message)
+
+        # ถ้ามีการแจ้งเตือน
+        if notification_messages:
+            context = {'notifications': notification_messages}
         else:
-            # ไม่มีข้อมูลการเตือนยา
-            message = "ไม่มีการตั้งเตือนยา"
-            context = {'notification': message}
+            context = {'notifications': ['ไม่มีการเตือนในขณะนี้']}
 
         # ส่งข้อมูลไปยัง template
         return render(request, 'notify.html', context)
-
-

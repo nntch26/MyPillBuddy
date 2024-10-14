@@ -6,11 +6,18 @@
     <title>แจ้งเตือน</title>
 </head>
 <body>
-    <h1>{{ notification }}</h1>
+    <h1>การแจ้งเตือน:</h1>
+
+    <ul>
+        {% for notification in notifications %}
+            <li>{{ notification }}</li>
+        {% endfor %}
+    </ul>
+
 </body>
-<!-- <script>
+<script>
     setTimeout(function(){
         location.reload();
     }, 1000); 
-</script> -->
+</script>
 </html>
