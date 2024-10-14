@@ -26,15 +26,6 @@ class indexView(View):
         return render(request, 'index.html')
 
 class HomeView(View):
-    def reset_medication_reminders(self):
-        current_date = timezone.now().date()
-        
-        # รีเซ็ตสถานะ taken เป็น False ทุกเที่ยงคืน ถ้ายังกินไม่ครบวัน
-        MedicationReminder.objects.filter(
-            prescription__end_date__gte=current_date,
-            taken=True
-        ).update(taken=False)
-
 
     def get(self, request):
         current_date = datetime.now()
