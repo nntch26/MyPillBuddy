@@ -13,7 +13,7 @@ import os
 from datetime import datetime, timedelta
 import time
 from django.conf import settings
-import pygame
+# import pygame
 
 from django.utils import timezone
 from datetime import datetime
@@ -27,45 +27,76 @@ class indexView(View):
         return render(request, 'index.html')
 
 class HomeView(View):
+    def reset_medication_reminders(self):
+        current_date = timezone.now().date()
+        
+        # รีเซ็ตสถานะ taken เป็น False ทุกเที่ยงคืน ถ้ายังกินไม่ครบวัน
+        MedicationReminder.objects.filter(
+            prescription__end_date__gte=current_date,
+            taken=True
+        ).update(taken=False)
+
+
     def get(self, request):
         current_date = datetime.now()
         take = request.GET.get('click', None)
-        # current_time_plus_five = (datetime.now() + timedelta(minutes=5)).time()
 
+        # กดกินยาแล้ว
         if take:
             medi = MedicationReminder.objects.get(id=take)
             medi.taken = True
             medi.save()
 
         patients = request.user
-        print(patients)  
+        print(patients) 
 
-        remimder_late = MedicationReminder.objects.filter(
-            prescription__patient__id= patients.id,
-            taken = False,
-            reminder_time__lt=current_date.time()
+
+        midnight = timezone.now().replace(hour=0, minute=0, second=0).time()
+        
+        # เที่ยงคืน อัปเดตสถานะ taken เป็น False สำหรับยา ที่ยังไม่หมดอายุ
+        if midnight == timezone.now().time():
+            MedicationReminder.objects.filter(
+                prescription__end_date__gte=timezone.now().date(),
+                taken=True
+            ).update(taken=False)
+
+
+        # แจ้งกินยาเลท (เวลาปัจจุบัน > reminder_time)
+        reminder_late = MedicationReminder.objects.filter(
+            prescription__patient__id=patients.id,
+            taken=False,
+            reminder_time__lt=current_date.time(),
+            prescription__end_date__gte=current_date.date()  # ต้องยังไม่เกินวัน end_date
         ).order_by('reminder_time')
 
-         # ดึงรายการยาที่ต้องกินตามเวลาปัจจุบัน เรียงตามเวลาที่ต้องกิน
-        reminder_list = MedicationReminder.objects.filter(
-            prescription__patient__id= patients.id,
-            reminder_time__gte=current_date.time()  
-        ).order_by('reminder_time')  
 
-        # reminder_eaten = MedicationReminder.objects.filter(
-        #     prescription__patient__id= patients.id,
-        #     taken= True
-        # ).order_by('reminder_time')  
+         # ดึงรายการยาที่ต้องกินตามเวลาปัจจุบัน เรียงตามเวลาที่ต้องกิน (เวลาปัจจุบัน <= reminder_time)
+        reminder_list = MedicationReminder.objects.filter(
+            prescription__patient__id=patients.id,
+            taken=False,  # ต้องยังไม่ถูกกิน
+            reminder_time__gte=current_date.time(),
+            prescription__end_date__gte=current_date.date()
+        ).order_by('reminder_time') 
+
+
+        # แจ้งกินยาแล้ว
+        reminder_eaten = MedicationReminder.objects.filter(
+            prescription__patient__id=patients.id,
+            taken=True,  # ถูกกินแล้ว
+            prescription__end_date__gte=current_date.date()
+        ).order_by('-reminder_time')
+
 
         print(reminder_list)
-        print(remimder_late)
-        # print(reminder_eaten)
+        print(reminder_late)
+        print(reminder_eaten)
 
 
         context = {
             'current_date':current_date,
             'reminder_list':reminder_list,
-            'remimder_late':remimder_late
+            'reminder_late':reminder_late,
+            'reminder_eaten':reminder_eaten
         }
         return render(request, 'home.html', context)
 
