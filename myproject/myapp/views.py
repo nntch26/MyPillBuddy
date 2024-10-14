@@ -37,6 +37,15 @@ class HomeView(View):
             medi.taken = True
             medi.save()
 
+            # ลบไฟล์ alert.mp3
+            file_path = 'myapp/static/alert.mp3'
+            
+            if os.path.exists(file_path):
+                os.remove(file_path)
+                print("ไฟล์ถูกลบเรียบร้อยแล้ว")
+            else:
+                print("ไม่พบไฟล์ที่ต้องการลบ")
+
         patients = request.user
         print(patients) 
 
