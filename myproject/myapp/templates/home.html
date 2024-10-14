@@ -1,12 +1,11 @@
 {% extends 'base.html' %}
-
 {% load static %}
 
 {% block title %} หน้าหลัก {% endblock title%}
 
 {% block content %}
 
-<body class="bg-light">
+<body class="bg-light" id="notification-container">
 
 
     <div class="header">
@@ -28,7 +27,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
                         <h1 style="color: red;">{{ i.reminder_time }} น.</h1>
-                        <h1 style="color: red;">เลยเวลากินแล้ว</h1>
+                        <h1 style="color: red;">ได้เวลาทานยาแล้ว</h1>
                         <h3>{{ i.prescription.medication.name }}</h3>
                         <h4 class="text-muted mb-2">( {{ i.prescription.duration }} )</h4>
                         <h6 class="" style="color: rgb(207, 0, 0);">หมายเหตุ: {{ i.prescription.notes }}</h6>
@@ -62,9 +61,9 @@
                     </div>
                     {% if not r.taken %}
                     <div class="d-flex align-items-center">
-                        <a href="{% url 'home' %}?click={{r.id}}" class="btn btn-danger">
+                        <button type="button" class="btn btn-outline-secondary" disabled>
                             <h4><i class="fas fa-pills me-2"></i>กินยา</h4>
-                        </a>
+                        </button>
                     </div>
                     {% else %}
                     <div class="d-flex align-items-center">
@@ -99,6 +98,9 @@
         {% endfor %}
         {% endif %}
 
+        <audio id="notification-sound" src="{% static 'alert.mp3' %}" preload="auto"></audio>
+    
+
 
 
 
@@ -109,9 +111,79 @@
 
 {% block script %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 <script>
     setTimeout(function () {
         location.reload();
     }, 30000); // JavaScript สำหรับรีเฟรช
+
+    let notifyTime = new Date("{{ notify_time }}"); // เวลาที่ตั้งไว้
+    let isPlaying = false; // สถานะการเล่นเสียง
+
+    console.log(notifyTime)
+
+    // ตรวจสอบการแจ้งเตือน
+    function checkNotification() {
+        const currentTime = new Date();
+
+        if (notifyTime && currentTime >= notifyTime) {
+            showNotification();
+            playSound();
+            notifyTime = null; // ปิดการแจ้งเตือนหลังจากแจ้งแล้ว
+        }
+    }
+
+    function playSound() {
+        const sound = document.getElementById('notification-sound');
+        if (!isPlaying) {
+            sound.loop = true; // ตั้งค่าให้เล่นเสียงซ้ำ
+            sound.play().catch(error => {
+                console.log('Sound play failed:', error);
+            });
+            isPlaying = true; // เปลี่ยนสถานะการเล่นเสียง
+        }
+    }
+
+    function stopSound() {
+        const sound = document.getElementById('notification-sound');
+        sound.pause();
+        sound.currentTime = 0; // รีเซ็ตเวลาเสียง
+        isPlaying = false; // เปลี่ยนสถานะการเล่นเสียง
+    }
+
+    function showNotification() {
+        const notification = document.createElement('div');
+        notification.className = 'notification';
+        notification.innerText = 'ถึงเวลาที่กำหนดแล้ว!';
+
+        const closeButton = document.createElement('button');
+        closeButton.className = 'close-button';
+        closeButton.innerText = 'ปิด';
+        closeButton.onclick = function() {
+            stopSound();
+            notification.remove();
+        };
+        notification.appendChild(closeButton);
+
+        document.getElementById('notification-container').appendChild(notification);
+    }
+
+    // ตรวจสอบการแจ้งเตือนทุกวินาที
+    setInterval(checkNotification, 1000);
+
+    // รอให้ผู้ใช้โต้ตอบกับหน้าเว็บก่อนที่จะเล่นเสียง
+    document.addEventListener('click', function() {
+        const sound = document.getElementById('notification-sound');
+        sound.play().then(() => {
+            sound.pause(); // เล่นและหยุดเพื่อเตรียมให้ระบบเล่นได้หลังมีการโต้ตอบ
+            console.log('Audio ready to play after user interaction');
+        }).catch(error => {
+            console.log('Initial interaction failed:', error);
+        });
+    });
+
 </script>
 {% endblock script %}

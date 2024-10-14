@@ -81,14 +81,42 @@ class HomeView(View):
         print(reminder_late)
         print(reminder_eaten)
 
+        message = " "
+        formatted_notify_time = None
+
+        for i in reminder_late:
+            itime = i.reminder_time
+            print(itime)
+
+            if  len(reminder_late) != 0 :
+
+                print("111111111")
+                formatted_notify_time2 = datetime.datetime.now().time().strftime('%H:%M')
+                message = f"""ตอนนี้เวลา {formatted_notify_time2} ได้เวลาทานยาแล้ว 
+                ยาที่ต้องทานคือ {i.prescription.medication.name}   
+                {i.prescription.notes} {i.prescription.duration}
+                """
+            
+                # สร้างเสียงพูดแจ้งเตือน
+                tts = gTTS(text=message, lang='th')
+                savefile = 'myapp/static/alert.mp3'
+                tts.save(savefile)
+                
+                notify_time = datetime.datetime.now()
+                print(notify_time)
+                formatted_notify_time = notify_time.strftime('%Y-%m-%dT%H:%M:%S')
+
 
         context = {
             'current_date':current_date,
             'reminder_list':reminder_list,
             'reminder_late':reminder_late,
-            'reminder_eaten':reminder_eaten
+            'reminder_eaten':reminder_eaten,
+            'message': message, 
+            'notify_time': formatted_notify_time
         }
         return render(request, 'home.html', context)
+
 
 class RegisterView(View):
     def get(self, request):
