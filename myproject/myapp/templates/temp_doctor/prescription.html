@@ -259,7 +259,10 @@
             <div class="mb-3">
                 <h1 class="form-label">คนไข้ {{ patient_select.first_name }} {{ patient_select.last_name }}</h1>
                 <div class="mb-3">
-                    <small class="text-muted">HN: {{ patient_select.id }} | เบอร์โทร: {{ patient_select.patient.phone_number }}</small>
+                    <small class="text-muted">HN: {{ patient_select.id }} | เบอร์โทร: {{ patient_select.patient.phone_number }}</small><br>
+                    <small class="text-muted">โรคประจำตัว: {{ patient_select.patient.chronic_disease }}</small><br>
+                    <small class="text-muted">ข้อมูลสุขภาพ: {{ patient_select.patient.health_detail }}</small>
+
                 </div>
             </div>
 

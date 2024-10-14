@@ -18,10 +18,10 @@
 
     <div class="container">
 
-        {% if remimder_late|length == 0 and reminder_list|length == 0 %}
-        <h1>ไม่มีรายการกินยาในวันนี้</h1>
+        {% if reminder_late|length == 0 and reminder_list|length == 0 %}
+        <h1 class="mt-3">ไม่มีรายการกินยาในวันนี้</h1>
         {% else %}
-        {% for i in remimder_late %}
+        {% for i in reminder_late %}
         {% if i %}
         <div class="med-card card">
             <div class="card-body">
@@ -76,6 +76,28 @@
         {% endfor %}
         {% endif %}
 
+        {% if reminder_eaten|length != 0 %}
+        {% for re in reminder_eaten %}
+        <div class="med-card card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h1>{{ re.reminder_time }} น.</h1>
+                        <h3>{{ re.prescription.medication.name }}</h3>
+                        <h4 class="text-muted mb-2">( {{ re.prescription.duration }} )</h4>
+                        <h6 class="" style="color: rgb(207, 0, 0);">หมายเหตุ: {{ re.prescription.notes }}</h6>
+                    </div>
+                    {% if re.taken %}
+                    <div class="d-flex align-items-center">
+                        <h4 style="color: green;"><i class="fas fa-pills me-2"></i>กินยาแล้ว</h4>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+
 
 
 
@@ -89,6 +111,6 @@
 <script>
     setTimeout(function () {
         location.reload();
-    }, 60000); // JavaScript สำหรับรีเฟรช
+    }, 30000); // JavaScript สำหรับรีเฟรช
 </script>
 {% endblock script %}
