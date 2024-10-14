@@ -1,6 +1,5 @@
 # SOFTWARE-DEVELOPMENT-TOOLS-AND-ENVIRONMENTS
 
-
 pip install humanize
 
 pip install django-bootstrap-v5
