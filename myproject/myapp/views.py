@@ -50,14 +50,27 @@ class HomeView(View):
         print(patients) 
 
 
-        midnight = timezone.now().replace(hour=0, minute=0, second=0).time()
-        
-        # เที่ยงคืน อัปเดตสถานะ taken เป็น False สำหรับยา ที่ยังไม่หมดอายุ
-        if midnight == timezone.now().time():
+        # กำหนดเวลาเที่ยงคืน (00:00:00)
+        # กำหนดเวลาเที่ยงคืนเป็นเวลาไทย
+        midnight = timezone.localtime(timezone.now()).replace(hour=0, minute=0, second=0, microsecond=0)
+
+        # เวลาปัจจุบันในรูปแบบเวลาไทย
+        now = timezone.localtime()
+
+        print(midnight)
+        print(now)
+
+        # ตรวจสอบว่าตอนนี้เป็นช่วงเวลาภายใน 1 นาทีหลังเที่ยงคืนหรือไม่
+        if midnight <= now < midnight + timedelta(minutes=1):
+            # อัปเดตสถานะ taken เป็น False เป็น True และยังไม่หมดอายุ
+            print(0000000)
             MedicationReminder.objects.filter(
                 prescription__end_date__gte=timezone.now().date(),
                 taken=True
             ).update(taken=False)
+        
+ 
+
 
 
         # แจ้งกินยาเลท (เวลาปัจจุบัน > reminder_time)
