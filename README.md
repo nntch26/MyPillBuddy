@@ -10,7 +10,6 @@
 
 ![image](https://github.com/user-attachments/assets/2434cbc1-40a6-4b16-96b2-ba05bd0ac900)
 ![image](https://github.com/user-attachments/assets/ae09e59b-0f19-43aa-8064-954a7f35ffe0)
-![image](https://github.com/user-attachments/assets/738deac8-5c70-447a-b8a0-ab8c1f3bb738)
 
 ## หน้าโปรไฟล์ แสดงข้อมูลส่วนตัวและข้อมูลแพทย์ที่ดูแล
 
